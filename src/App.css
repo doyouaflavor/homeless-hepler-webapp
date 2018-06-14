@@ -1,0 +1,206 @@
+/*color
+  #F7B815 橘
+*/
+
+/*material-ui initial*/
+.root {
+  flex-grow: 1;
+}
+.paper {
+  padding: 2px;
+  height: 100%;
+}
+/*initial design*/
+h1{
+  font-size: 56px;
+  font-weight: bold;
+}
+/*AppBar*/
+.navbar {
+  background-color: #333333 !important;
+  box-shadow: none !important;
+}
+.life-logo{
+  width: 70px;
+  margin-right: 20px;
+}
+.flex {
+  flex: 1;
+}
+.tab-right {
+  display: flex !important;
+}
+.tab-content {
+  margin-right: 20px !important;
+  cursor: pointer;
+}
+
+/*intro page*/
+.intro-page {
+  min-height: 568px;
+  background-color: gray;
+}
+.logo-container {
+  text-align: right;
+}
+.intro-life-logo {
+  width: 100px;
+  height: auto;
+  margin-right: 34px;
+}
+.intro-title {
+  color: white !important;
+  font-weight: bold !important;
+  text-align: center;
+}
+.intro-left-content {
+  color: white !important;
+  font-weight: 300 !important;
+  margin-top: 45px !important;
+  line-height: 23px !important;
+}
+.intro-left {
+  width: 510px !important;
+  margin: 0 auto;
+}
+.intro-content-right {
+  color: white !important;
+  font-size: 28px !important;
+  text-align: center;
+}
+.c-link {
+  color: #F7B815 !important;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.c-link-big {
+  color: #F7B815 !important;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 20px !important;
+}
+.intro-button {
+  color: white !important;
+  font-size: 36px !important;
+  font-weight: 400 !important;
+  background-color: #F7B815 !important;
+  box-shadow: none !important;
+  margin-bottom: 45px !important;
+}
+.intro-left-sm {
+  text-align: center;
+}
+
+/*calendar page*/
+.calendar-page {
+  min-height: 648px;
+}
+.calendarpage-left {
+  min-height: 648px;
+  background-color: #F7B815;
+  height: 100%;
+}
+.calendarpage-left-content h1{
+  color: white ;
+  font-weight: 500 ;
+  font-size: 48px ;
+}
+.calendarpage-left-content p {
+  font-size: 20px;
+  color: #666666;
+  margin-bottom: 2px;
+}
+.log-status {
+  color: white;
+  border: 1px solid white;
+  font-size: 28px;
+  text-align: center;
+  margin-top: 10px;
+}
+.calendarpage-left-button {
+  color: white !important;
+  font-size: 36px !important;
+  font-weight: 400 !important;
+  background-color: #666666 !important;
+  margin-top: 180px !important;
+}
+
+/* motivation */
+.motiv-page {
+  background-color: #333333;
+  padding-bottom: 90px;
+  color: white;
+}
+.motiv-page h1{
+  font-weight: 400 ;
+  font-size: 36px ;
+  margin: 2px 0 2px 0;
+}
+.motiv-block-first {
+  width: 80% !important;
+}
+.motiv-block-second {
+  margin-top: 90px;
+}
+.buttom-line {
+  width: 180px;
+  border-bottom: 1px solid white;
+  margin-top: 30px;
+}
+/* rwd */
+@media only screen and (max-width: 960px) {
+.intro-page {
+  height: 100%;
+}
+.intro-left {
+  width: 80% !important;
+  text-align: center;
+  margin-bottom: 40px;
+}
+.intro-left-sm {
+  margin-top: 40px;
+}
+.intro-right {
+  margin-bottom: 40px;
+}
+.intro-life-logo {
+  margin-right: 0px;
+}
+/* calendar page */
+.calendarpage-left {
+  min-height: 400px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+.intro-left-content {
+  font-size: 14px !important;
+  margin-top: 18px !important;
+}
+.intro-title {
+  font-size: 40px !important;
+}
+.intro-life-logo {
+  width: 80px;
+}
+.intro-content-right {
+  font-size: 20px !important;
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
