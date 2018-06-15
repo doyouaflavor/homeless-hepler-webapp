@@ -15,6 +15,11 @@ h1{
   font-size: 56px;
   font-weight: bold;
 }
+a {
+  color: white !important;
+  background-color: none !important;
+  text-decoration: none !important;
+}
 /*AppBar*/
 .navbar {
   background-color: #333333 !important;
@@ -23,6 +28,9 @@ h1{
 .life-logo{
   width: 70px;
   margin-right: 20px;
+}
+.logo-title {
+  color: white !important;
 }
 .flex {
   flex: 1;
@@ -39,6 +47,9 @@ h1{
 .intro-page {
   min-height: 568px;
   background-color: gray;
+  background-image:url('./dist/images/header_bg.jpg');
+  background-size: cover;
+  border: none !important;
 }
 .logo-container {
   text-align: right;
@@ -130,6 +141,8 @@ h1{
   background-color: #333333;
   padding-bottom: 90px;
   color: white;
+  background-image:url('./dist/images/section-orig_bg.jpg');
+  background-size: contain;
 }
 .motiv-page h1{
   font-weight: 400 ;
@@ -146,6 +159,48 @@ h1{
   width: 180px;
   border-bottom: 1px solid white;
   margin-top: 30px;
+}
+.motiv-block-right {
+  padding-left: 40px;
+}
+.motiv-block-right h2 {
+  margin-top: 0px;
+  font-size: 28px;
+  font-weight: 300;
+  margin-bottom: 60px;
+}
+.motiv-block-right h3 {
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 45px;
+}
+.motiv-block-right h4{
+  font-size: 20px;
+  font-weight: 300;
+  margin: 10px 0 10px 0;
+  color: #C0C0C0;
+}
+.text-right {
+  text-align: right;
+}
+.mark-box {
+  border: 1px solid #F7B815;
+  padding: 2px 4px 2px 4px;
+  border-radius: 4px;
+}
+.mark-box-icon {
+  border: 1px solid #F7B815;
+  padding: 4px 1px 4px 1px;
+  border-radius: 4px;
+  width: 120px;
+  text-align: center;
+}
+.howtowork {
+  display: flex;
+}
+.fa-arrow-right {
+  align-self: center;
+  padding: 0px 20px 0px 20px;
 }
 /* rwd */
 @media only screen and (max-width: 960px) {
@@ -170,9 +225,46 @@ h1{
 .calendarpage-left {
   min-height: 400px;
 }
+/* motivation page */
+.motiv-block-right {
+  padding-left: 0px;
+}
+.motiv-block-left {
+  text-align: center;
+  margin-bottom: 50px !important;
+}
+.motiv-page h1 {
+  font-size: 28px;
+}
+.buttom-line {
+  margin: 0 auto;
+  margin-top: 16px;
+}
+.motiv-block-right h2 {
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.motiv-block-right h3{
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+.motiv-block-right h4{
+  font-size: 14px;
+}
+.howtowork {
+  display: inline-flex;
+  margin: 0 auto;
+}
+.block-center {
+  text-align: center;
+}
 }
 
 @media only screen and (max-width: 600px) {
+.intro-page {
+  background-image:url('./dist/images/header_mobile2.jpg');
+}
 .intro-left-content {
   font-size: 14px !important;
   margin-top: 18px !important;
@@ -185,6 +277,15 @@ h1{
 }
 .intro-content-right {
   font-size: 20px !important;
+}
+.mark-box-icon {
+  width: 80px;
+}
+.motiv-block-right h2 {
+  font-size: 16px;
+}
+.fa-arrow-right {
+    padding: 0px 5px 0px 5px;
 }
 }
 

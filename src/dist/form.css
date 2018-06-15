@@ -1,0 +1,83 @@
+.form-page {
+	background-color: #F7F7F7;
+	height: 100vh;
+}
+.form-nav {
+	width: 100%;
+	background-color: #F7B815 !important;
+	box-shadow: none !important;
+	height: 55px;
+	font-size: 20px;
+	font-weight: 300;
+	color: white;
+	text-align: center;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.stepp-style {
+	font-size: 20px !important;
+	color: #F7B815 !important;
+	background-color: #F7F7F7 !important;
+}
+.step-number text {
+	fill: white !important;
+}
+.step-number circle {
+	font-size: 30px;
+}
+
+/* form content */
+.form-frame {
+	background-color: white;
+	margin-bottom: 30px;
+}
+.form-one {
+	width: 100%;
+	border: 1px solid #C0C0C0;
+	border-radius: 6px;
+	height: 400px;
+	text-align: center;
+}
+.form-title {
+	font-size: 20px;
+	color: #666666;
+	padding: 10px 0 10px 0;
+	border-bottom: 1px solid #C0C0C0;
+}
+.form-one-left {
+	text-align: left;
+	padding: 0 20px 0 20px;
+	color: #666666;
+}
+.form-one-left h2 {
+	font-size: 16px;
+	font-weight: 300;
+}
+.form-one-left h3 {
+	font-size: 14px;
+	font-weight: 200;
+}
+.form-framemark {
+	color: #F7B815;
+	border: 1px solid #F7B815;
+	padding: 2px 4px 2px 4px;
+	width: 70px;
+	text-align: center;
+}
+.form-one-right {
+	text-align: left;
+	padding: 0 20px 0 20px;
+}
+.form-one-right h2 {
+	font-size: 16px;
+	font-weight: 300;
+}
+
+
+
+
+
+
+
+
