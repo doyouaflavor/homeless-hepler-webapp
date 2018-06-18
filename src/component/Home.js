@@ -181,10 +181,10 @@ class Home extends Component {
                   <h2 className="howtowork">
                     <div className="mark-box-icon">
                       <i className="fas fa-search"></i><span> 查詢</span>
-                    </div><i className="fas fa-arrow-right"></i>
+                    </div><i className="fas fa-arrow-right how-arrow"></i>
                     <div className="mark-box-icon">
                       <i className="fas fa-edit"></i><span> 登記</span>
-                    </div><i className="fas fa-arrow-right"></i>
+                    </div><i className="fas fa-arrow-right how-arrow"></i>
                     <div className="mark-box-icon">
                       <i className="fas fa-calendar"></i><span> 日曆</span>
                     </div>            

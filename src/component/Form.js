@@ -11,21 +11,38 @@ import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from '@material-ui/core/Grid';
+import { createMuiTheme } from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
+
 
 import { Link as Rlink} from 'react-router-dom';
 
 import '../dist/form.css';
 import WhiteLogo from '../dist/images/life_whitelogo.png';
+import Itemlist from './itemlist';
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#757ce8',
+      main: '#444444',
+      dark: '#002884',
+      contrastText: '#444444',
+    },
+    secondary: {
+      light: '#ff7961',
+      main: '#444444',
+      dark: '#ba000d',
+      contrastText: '#444444',
+    },
+  },
+});
 
 const styles = theme => ({
   root: {
     width: '90%',
     margin: '0 auto',
     backgroundColor: '#F7F7F7',
-  },
-  button: {
-    marginRight: theme.spacing.unit,
   },
   stepstyle:{
     fontSize:'20px',
@@ -37,6 +54,7 @@ function getSteps() {
 }
 
 function getStepContent(step) {
+
   switch (step) {
     case 0:
       return (
@@ -53,9 +71,20 @@ function getStepContent(step) {
             </Grid>
           </Grid>
         </div>
-      )
+      );
     case 1:
-      return '物資';
+      return (
+        <div className="form-one">
+          <div className="form-title">請填寫您這次預定捐贈的物資與數量</div>
+          <div className="form-subtitle">
+            <Switch
+            value="checkedA"
+            />
+            每次發放物資皆相同
+          </div>
+          <Itemlist/>
+        </div>
+      );
     case 2:
       return '捐贈者資料';
     case 3:
@@ -122,7 +151,9 @@ class Form extends React.Component {
               return (
                 <Step key={label} {...props}>
                   <StepLabel {...labelProps} className="step-number">
-                    <span className="stepp-style">{label}</span>
+                    <span className="stepp-style">
+                      <Hidden xsDown>{label}</Hidden>
+                    </span>
                   </StepLabel>
                 </Step>
               );
@@ -144,14 +175,22 @@ class Form extends React.Component {
               <div>
                 <div className="form-frame">{getStepContent(activeStep)}</div>
 
-                <div>
-                  <Button disabled={activeStep === 0} onClick={this.handleBack} className={classes.button}>
-                    Back
-                  </Button>
-                  <Button variant="contained" color="primary" onClick={this.handleNext} className={classes.button}>
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
-                </div>
+                <Grid container direction="row" justify="space-between">
+                  <Button variant="outlined" disabled={activeStep === 0} onClick={this.handleBack} className="formbutton-back">
+                    <i className="fas fa-arrow-left"></i> 
+                    上一步</Button>
+                  <Hidden smUp>
+                      <div className="cancle-log">取消登記</div>
+                  </Hidden>
+                  <div className="button-right-block">
+                    <Hidden xsDown>
+                      <div className="cancle-log">取消登記</div>
+                    </Hidden>
+                    <Button variant="contained" color="primary" onClick={this.handleNext} className="formbutton-next">
+                      {activeStep === steps.length - 1 ? '確定登記' : '下一步'}
+                      <i className="fas fa-arrow-right"></i></Button>
+                  </div>
+                </Grid>
               </div>
             )}
           </div>
