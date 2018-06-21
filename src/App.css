@@ -42,6 +42,9 @@ a {
   margin-right: 20px !important;
   cursor: pointer;
 }
+.white-menu-icon {
+  color: white !important;
+}
 
 /*intro page*/
 .intro-page {

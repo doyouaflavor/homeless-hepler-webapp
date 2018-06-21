@@ -1,5 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import '../dist/form.css';
+import { Link as Rlink} from 'react-router-dom';
+import WhiteLogo from '../dist/images/life_whitelogo.png';
+import GetStepContent from './GetStepContent';
+
 import { withStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -8,36 +12,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import MenuIcon from '@material-ui/icons/Menu';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from '@material-ui/core/Grid';
-import { createMuiTheme } from '@material-ui/core/styles';
-import Switch from '@material-ui/core/Switch';
 
-
-import { Link as Rlink} from 'react-router-dom';
-
-import '../dist/form.css';
-import WhiteLogo from '../dist/images/life_whitelogo.png';
-import Itemlist from './itemlist';
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#757ce8',
-      main: '#444444',
-      dark: '#002884',
-      contrastText: '#444444',
-    },
-    secondary: {
-      light: '#ff7961',
-      main: '#444444',
-      dark: '#ba000d',
-      contrastText: '#444444',
-    },
-  },
-});
-
+// Over write material-ui
 const styles = theme => ({
   root: {
     width: '90%',
@@ -49,60 +27,37 @@ const styles = theme => ({
   },
 });
 
+// form title
 function getSteps() {
   return ['地點與日期', '物資', '捐贈者資料' , '確認資料'];
 }
 
-function getStepContent(step) {
-
-  switch (step) {
-    case 0:
-      return (
-        <div className="form-one">
-          <div className="form-title">請選擇您想要捐贈物資的地點與日期</div>
-          <Grid container direction='row' alignItems='flex-start' justify='center'>
-            <Grid item sm={12} md={4} className="form-one-left">
-              <h2>地點</h2>
-              <h2 className="form-framemark">台北車站</h2>
-              <h3>目前系統僅開放登記台北車站，欲登記其他地點請私訊 <span className="c-link">人生百味粉絲專頁</span></h3>
-            </Grid>
-            <Grid item sm={12} md={8} className="form-one-right">
-              <h2>日期</h2>
-            </Grid>
-          </Grid>
-        </div>
-      );
-    case 1:
-      return (
-        <div className="form-one">
-          <div className="form-title">請填寫您這次預定捐贈的物資與數量</div>
-          <div className="form-subtitle">
-            <Switch
-            value="checkedA"
-            />
-            每次發放物資皆相同
-          </div>
-          <Itemlist/>
-        </div>
-      );
-    case 2:
-      return '捐贈者資料';
-    case 3:
-      return '確認資料';
-    default:
-      return 'Unknown step';
-  }
-}
-
 class Form extends React.Component {
-  static propTypes = {
-    classes: PropTypes.object,
-  };
 
   state = {
     activeStep: 0,
+    date:'',
+    time:'',
   };
 
+// 獲取日期跟時間的資訊，其他的表單資訊還沒串到這裡
+  getDate = (newDate) => {
+      this.setState({
+        date: newDate,
+      }, function() {
+          console.log('date:' + this.state.date);
+      })
+  };
+  getTime = (newTime) => {
+      this.setState({
+        time: newTime,
+      }, function() {
+          console.log('time:' + this.state.time);
+      })
+  };
+
+
+//按鈕控制
   handleNext = () => {
     const { activeStep } = this.state;
     this.setState({
@@ -173,8 +128,17 @@ class Form extends React.Component {
               </div>
             ) : (
               <div>
-                <div className="form-frame">{getStepContent(activeStep)}</div>
+                <div className="form-frame">
 
+{/* 判斷是哪一個填表步驟 */}
+                  <GetStepContent
+                    activeStep={this.state.activeStep}
+                    callGetDate={this.getDate}
+                    callGetTime={this.getTime}
+                    childData={this.state.data}
+                  />
+
+                </div>
                 <Grid container direction="row" justify="space-between">
                   <Button variant="outlined" disabled={activeStep === 0} onClick={this.handleBack} className="formbutton-back">
                     <i className="fas fa-arrow-left"></i> 

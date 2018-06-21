@@ -7,7 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import MenuIcon from '@material-ui/icons/Menu';
+// import MenuIcon from '@material-ui/icons/Menu';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -95,9 +95,9 @@ class Home extends Component {
                 </Typography>           
               </div>    
             </Hidden>
-            <Hidden mdUp>
-              <MenuIcon />
-            </Hidden>
+{/*             <Hidden mdUp> */}
+{/*               <MenuIcon className="white-menu-icon" /> */}
+{/*             </Hidden> */}
           </Toolbar>
         </AppBar>
 
