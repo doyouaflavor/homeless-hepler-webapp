@@ -44,6 +44,7 @@ class GetInfo extends React.Component {
 						name="type" 
 						onChange={this.handleInputChange}
 						value={this.state.type}
+						defaultValue={this.state.type}
 					>
 						<option value="group">團體</option>
 						<option value="individual">個人</option>
@@ -70,6 +71,7 @@ class GetInfo extends React.Component {
 						name="contactName" 
 						onChange={this.handleInputChange}
 						value={this.state.contactName}
+						defaultValue={this.state.contactName}
 					/>
 					<select 
 						type="text" 

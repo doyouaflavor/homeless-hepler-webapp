@@ -51,7 +51,6 @@ class GetItem extends React.Component {
                   type="text"
                   placeholder={`(例：便當)`}
                   value={this.state.foodname}
-                  onChange={this.handleShareholderNameChange(idx)}
                 />
               </Grid>
               <Grid item xs={12} md={4} className="item">
@@ -60,7 +59,6 @@ class GetItem extends React.Component {
                   type="text"
                   placeholder={`(例：20~30個)`}
                   value={this.state.amount}
-                  onChange={this.handleShareholderNameChange(idx)}
                 />
                 <h4 className="hidden-md">若無確切數量，填寫大約範圍即可</h4>
               </Grid>
@@ -70,7 +68,6 @@ class GetItem extends React.Component {
                   type="text"
                   placeholder={`(例：素食)`}
                   value={this.state.description}
-                  onChange={this.handleShareholderNameChange(idx)}
                 />
                 <Hidden smDown>
                   <button type="button" onClick={this.handleAddShareholder}>+</button>

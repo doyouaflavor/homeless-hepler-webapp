@@ -117,7 +117,7 @@ class Home extends Component {
                     </Hidden>
                   <div>
                     <Typography className="intro-left-content" variant="title">這是一個整合街頭資源的網站，包含食物分享的資訊、登記與查閱的功能，讓街上的資源能更有效地運用，並穩定無家者的基本生活需求</Typography>
-                    <Typography className="intro-left-content" variant="title">志工系統建置中，欲擔任志工請私訊 <span className="c-link">人生百味粉絲專頁</span> </Typography>
+                    <Typography className="intro-left-content" variant="title">志工系統建置中，欲擔任志工請私訊 <a href="https://www.facebook.com/Do.you.a.flavor/" className="c-link">人生百味粉絲專頁</a> </Typography>
                   </div>
                 </Grid>
             </Grid>

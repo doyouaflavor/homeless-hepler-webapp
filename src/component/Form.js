@@ -3,6 +3,7 @@ import '../dist/form.css';
 import { Link as Rlink} from 'react-router-dom';
 import WhiteLogo from '../dist/images/life_whitelogo.png';
 import GetStepContent from './GetStepContent';
+import ThanksGiving from './ThanksGiving';
 
 import { withStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
@@ -17,11 +18,6 @@ import Grid from '@material-ui/core/Grid';
 
 // Over write material-ui
 const styles = theme => ({
-  root: {
-    width: '90%',
-    margin: '0 auto',
-    backgroundColor: '#F7F7F7',
-  },
   stepstyle:{
     fontSize:'20px',
   },
@@ -79,7 +75,6 @@ class Form extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
     const steps = getSteps();
     const { activeStep } = this.state;
 
@@ -97,7 +92,7 @@ class Form extends React.Component {
         <div className="form-nav">
             <span><i className="fas fa-utensils"></i> 物資登記發放</span>
         </div>
-        <div className={classes.root}>
+        <div className="form-inside">
   {/* 進度條 */}
           <Stepper activeStep={activeStep} className="stepp-style">
             {steps.map((label, index) => {
@@ -117,15 +112,7 @@ class Form extends React.Component {
 
           <div>
             {activeStep === steps.length ? (
-
-              <div>
-                <Typography className={classes.instructions}>
-                  All steps completed - you&quot;re finished
-                </Typography>
-                <Button onClick={this.handleReset} className={classes.button}>
-                  Reset
-                </Button>
-              </div>
+              <ThanksGiving/>
             ) : (
               <div>
                 <div className="form-frame">
@@ -135,7 +122,6 @@ class Form extends React.Component {
                     activeStep={this.state.activeStep}
                     callGetDate={this.getDate}
                     callGetTime={this.getTime}
-                    childData={this.state.data}
                   />
 
                 </div>
@@ -144,11 +130,15 @@ class Form extends React.Component {
                     <i className="fas fa-arrow-left"></i> 
                     上一步</Button>
                   <Hidden smUp>
+                    <Rlink to="/">
                       <div className="cancle-log">取消登記</div>
+                    </Rlink>
                   </Hidden>
                   <div className="button-right-block">
                     <Hidden xsDown>
-                      <div className="cancle-log">取消登記</div>
+                      <Rlink to="/">
+                        <div className="cancle-log">取消登記</div>
+                      </Rlink>
                     </Hidden>
                     <Button variant="contained" color="primary" onClick={this.handleNext} className="formbutton-next">
                       {activeStep === steps.length - 1 ? '確定登記' : '下一步'}
