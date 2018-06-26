@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as Rlink} from 'react-router-dom';
-import '../dist/form.css';
 import HollowLogo from '../dist/images/logo_frame.png';
+import '../App.css';
 
 import Grid from '@material-ui/core/Grid';
 

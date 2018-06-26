@@ -1,5 +1,4 @@
 import React from 'react';
-import '../dist/form.css';
 
 class GetInfo extends React.Component {
 	constructor(props) {

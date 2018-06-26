@@ -1,5 +1,5 @@
 import React from 'react';
-import '../dist/form.css';
+import '../App.css';
 import { Link as Rlink} from 'react-router-dom';
 import WhiteLogo from '../dist/images/life_whitelogo.png';
 import GetStepContent from './GetStepContent';

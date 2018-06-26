@@ -1,0 +1,36 @@
+.footer {
+  background-color: $nav-color;
+  .frame {
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    .block {
+      margin-bottom: 20px;
+      color: white;
+      i {
+        color: white;
+        font-size: 40px;
+        margin-left: 20px;
+      }
+      h2, h3 {
+        color: white;
+        font-weight: 200;
+      }
+      h3 {
+        text-decoration: underline;
+      }
+    }
+    .right {
+      text-align: center;
+      h1 {
+        color: white;
+        font-size: 24px;
+      }
+      h2 {
+        font-weight: 200;
+        color: white;
+      }
+    }
+  }
+}

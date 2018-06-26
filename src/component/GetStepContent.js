@@ -1,5 +1,4 @@
 import React from 'react';
-import '../dist/form.css';
 import GetTimeDate from './GetTimeDate';
 import GetItem from './GetItem';
 import GetInfo from './GetInfo';

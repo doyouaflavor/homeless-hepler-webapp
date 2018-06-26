@@ -1,6 +1,11 @@
 .form-page {
 	background-color: #F7F7F7;
-	height: 100vh;
+	min-height: 100vh;
+	padding-bottom: 80px;
+}
+.form-page .form-inside {
+	width: 95%;
+	margin: 0 auto;
 }
 .form-frame {
 	background-color: white;
