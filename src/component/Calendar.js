@@ -15,7 +15,6 @@ import padStart from 'lodash/padStart';
 import range from 'lodash/range';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import '../dist/Calendar.css';
 
 BigCalendar.momentLocalizer(moment);
 
