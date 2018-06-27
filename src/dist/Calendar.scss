@@ -1,0 +1,187 @@
+$primary-color: #F7B815;
+
+$border-color: rgba(234, 234, 234, 0.4);
+$add-event-btn-color: rgba(180, 180, 180, 0.7);
+$cell-border: 4px solid $border-color;
+
+$dates-selector-border: 2px solid #E3E3E3;
+$dates-selector-content-padding: 13px;
+$dates-selector-select-border: 2px solid #D3D3D3;
+
+.Calendar {
+  height: 500px;
+  padding: 10px 10px 25px 10px;
+  margin: 0 auto;
+
+  .rbc-calendar {
+    .rbc-toolbar {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 10px;
+
+      .rbc-toolbar-label {
+        flex-grow: 0;
+        padding: 0 30px;
+      }
+
+      .toolbar-arrow {
+        cursor: pointer;
+      }
+    }
+
+    .rbc-month-view {
+      border: none;
+
+      .rbc-month-header {
+        .rbc-header {
+          border: none;
+          font-weight: normal;
+          padding-bottom: 5px;
+          font-size: 75%;
+        }
+      }
+
+      .rbc-month-row {
+        border-top: $cell-border;
+        background-clip: padding-box;
+
+        &:last-child {
+          border-bottom: $cell-border;
+        }
+
+        .rbc-row-content {
+          .rbc-row {
+            .rbc-date-cell {
+              text-align: left;
+              padding: 5px 0 0 10px;
+
+              a {
+                color: #666 !important;
+                cursor: default;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+
+        .rbc-row-bg {
+          .rbc-day-bg {
+            border-left: $cell-border;
+            background-clip: padding-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+
+            &:last-child {
+              border-right: $cell-border;
+            }
+
+            &.day-event {
+              background-color: $border-color
+            }
+
+            .add-event-btn {
+              align-self: flex-end;
+              cursor: pointer;
+              z-index: 5;
+              margin: 5px 7px 0 0;
+              width: 18px;
+              height: 18px;
+              color: $add-event-btn-color;
+            }
+
+            .day-event-title {
+              color: $primary-color;
+              border: 1px solid $primary-color;
+              padding: 2px;
+              font-size: 9px;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .Dates-Selector {
+    border: $dates-selector-border;
+    border-radius: 5px;
+    box-shadow: 0 7px 6px -6px #AAA;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+
+    .Dates-Selector-Select {
+      text-align: center;
+      color: inherit;
+
+      .MuiInput-input-205 {
+        border-bottom: $dates-selector-select-border !important;
+      }
+    }
+
+    .Dates-Selector-Header {
+      border-bottom: $dates-selector-border;
+      padding: $dates-selector-content-padding;
+      display: flex;
+      align-items: flex-end;
+
+      .Dates-Selector-Header-Day {
+        color: #333;
+        font-size: 16px;
+        padding-right: 30px;
+      }
+
+      .Dates-Selector-Header-Reset {
+        color: $primary-color;
+        font-size: 12px;
+        cursor: pointer;
+      }
+    }
+
+    .Dates-Selector-Content {
+      flex-grow: 1;
+      display: flex;
+
+      .Dates-Selector-Content-Part {
+        padding: $dates-selector-content-padding;
+        flex: 1 0;
+
+        &:first-child {
+          border-right: $dates-selector-border;
+        }
+
+        .Dates-Selector-Time {
+          padding-top: 20px;
+          width: 130px;
+        }
+
+        .Dates-Selector-Event {
+          margin: 15px 30px 15px 0;
+          padding: 10px;
+          width: 90%;
+          border: 1px solid $primary-color;
+          border-radius: 2px;
+          background-color: #FFFBF2;
+          color: $primary-color;
+          display: flex;
+
+          .Dates-Selector-Event-Time {
+            padding-right: 10px;
+          }
+
+          .Dates-Selector-Event-Items {
+            .Dates-Selector-Event-Item:not(:last-child) {
+              margin-bottom: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
