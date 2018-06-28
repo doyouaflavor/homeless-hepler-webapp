@@ -16,6 +16,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from '@material-ui/core/Grid';
 
+import moment from 'moment';
+import map from 'lodash/map';
+import merge from 'lodash/merge';
+
 import { getTaipeiStationEvents } from '../api/events';
 
 // Over write material-ui
@@ -40,7 +44,10 @@ class Form extends React.Component {
 
   async componentDidMount() {
     try {
-      const registeredEvents  = await getTaipeiStationEvents()
+      const events = await getTaipeiStationEvents();
+      const registeredEvents = map(events, (event) => merge(event, {
+        date: moment(event.date),
+      }))
 
       this.setState({
         registeredEvents,

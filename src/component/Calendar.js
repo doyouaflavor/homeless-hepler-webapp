@@ -10,6 +10,8 @@ import AddIcon from '@material-ui/icons/AddCircle';
 
 import classnames from 'classnames'
 import moment from 'moment';
+import find from 'lodash/find';
+import filter from 'lodash/filter';
 import map from 'lodash/map';
 import padStart from 'lodash/padStart';
 import range from 'lodash/range';
@@ -33,7 +35,18 @@ const GIVE_TIME = map(range(48), (idx) => {
   const minute = idx % 2 === 0 ? 0 : 30;
 
   return `${padStart(hour, 2, '0')}:${padStart(minute, 2, '0')}`;
-})
+});
+
+const getTimeStr = (date) => (
+  `${padStart(date.hour(), 2, '0')}：${padStart(date.minute(), 2, '0')}`
+);
+const getItemStr = (item) => `${item.name} ${item.amount}`;
+
+const matchEvent = (e0, e1) => (
+  e0.year() === e1.year() &&
+  e0.month() === e1.month() &&
+  e0.date() === e1.date()
+);
 
 class Toolbar extends BigToolbar {
   render() {
@@ -49,21 +62,31 @@ class Toolbar extends BigToolbar {
 
 class DateCellWrapper extends React.Component {
   render() {
-    const date = moment(this.props.value)
-    const hasEvent = date.date() % 5 === 2;
+    const { registeredEvents, value } = this.props;
+    const shownDate = moment(value);
+    const matchedEvent = find(registeredEvents, ({ date }) => (
+      matchEvent(date, shownDate)
+    ))
     const className = classnames('rbc-day-bg', {
-      'day-event': hasEvent,
+      'day-event': matchedEvent,
     });
+    let title;
+
+    if (matchedEvent && matchedEvent.content.length > 0) {
+      const { date, content } = matchedEvent;
+
+      title = `${getTimeStr(date)} ${getItemStr(content[0])}`;
+    }
 
     return (
       <div className={className}>
         <AddIcon
           className='add-event-btn'
-          onClick={() => this.props.updateShownDate(date)}
+          onClick={() => this.props.updateShownDate(shownDate)}
         />
         {
-          hasEvent &&
-          <div className='day-event-title'>12:00 便當 20個 喔喔喔</div>
+          matchedEvent &&
+          <div className='day-event-title'>{title}</div>
         }
       </div>
     );
@@ -105,6 +128,7 @@ class Calendar extends React.Component {
     const components = {
       dateCellWrapper: (props) => (
         <DateCellWrapper
+          registeredEvents={this.props.registeredEvents}
           updateShownDate={this.updateShownDate}
           {...props}
         />
@@ -124,18 +148,49 @@ class Calendar extends React.Component {
   }
 
   renderDatesSelector() {
+    const { registeredEvents } = this.props;
     const { shownDate, selectedTime } = this.state;
+    const matchedEvents = filter(registeredEvents, ({ date }) => (
+      matchEvent(date, shownDate)
+    ))
     const headerDay =
       `${shownDate.year()} 年 ${shownDate.month() + 1} 月 ` +
       `${shownDate.date()} 日 (星期${ZH_WEEKDAY[shownDate.day()]})`;
-      const selectItems = map(GIVE_TIME, (time) => (
-        <MenuItem
-          key={time}
-          value={time}
+    const timeSelectItems = map(GIVE_TIME, (time) => (
+      <MenuItem
+        key={time}
+        value={time}
+      >
+        {time}
+      </MenuItem>
+    ))
+    const eventItems = map(matchedEvents, ({ _id, date, content }) => {
+      const time = (
+        <div className='Dates-Selector-Event-Time'>
+          {getTimeStr(date)}
+        </div>
+      );
+      const itemList = map(content, (item, idx) => (
+        <div
+          key={idx}
+          className='Dates-Selector-Event-Item'
+        >
+          {getItemStr(item)}
+        </div>
+      ));
+
+      return (
+        <div
+          key={_id}
+          className='Dates-Selector-Event'
         >
           {time}
-        </MenuItem>
-      ))
+          <div className='Dates-Selector-Event-Items'>
+            {itemList}
+          </div>
+        </div>
+      )
+    })
 
     return (
       <div className='Dates-Selector'>
@@ -157,24 +212,12 @@ class Calendar extends React.Component {
               onChange={this.handleSelectedTimeChange}
               IconComponent={DownArrowIcon}
             >
-              {selectItems}
+              {timeSelectItems}
             </Select>
           </div>
           <div className='Dates-Selector-Content-Part'>
             <div>當天已有的登記</div>
-            <div className='Dates-Selector-Event'>
-              <div className='Dates-Selector-Event-Time'>
-                12：00
-              </div>
-              <div className='Dates-Selector-Event-Items'>
-                <div className='Dates-Selector-Event-Item'>
-                  PIZZA 30個
-                </div>
-                <div className='Dates-Selector-Event-Item'>
-                  便當 20個
-                </div>
-              </div>
-            </div>
+            {eventItems}
           </div>
         </div>
       </div>
