@@ -32,6 +32,7 @@ class GetStepContent extends React.Component {
                                         <Calendar
                                           registeredEvents={this.props.registeredEvents}
                                           canAdd={true}
+                                          fetched={this.props.fetched}
                                         />
 				    </Grid>
 				  </Grid>

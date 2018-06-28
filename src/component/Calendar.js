@@ -7,6 +7,7 @@ import LeftArrowIcon from '@material-ui/icons/KeyboardArrowLeft';
 import RightArrowIcon from '@material-ui/icons/KeyboardArrowRight';
 import DownArrowIcon from '@material-ui/icons/KeyboardArrowDown';
 import AddIcon from '@material-ui/icons/AddCircle';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import classnames from 'classnames'
 import moment from 'moment';
@@ -120,6 +121,9 @@ class Calendar extends React.Component {
   }
 
   renderBigCalendar() {
+    const className = classnames({
+      transparent: !this.props.fetched,
+    });
     const formats = {
       dateFormat: (date) => date.getDate().toString(),
       weekdayFormat: (date) => `星期${ZH_WEEKDAY[date.getDay()]}`,
@@ -139,6 +143,7 @@ class Calendar extends React.Component {
 
     return (
       <BigCalendar
+        className={className}
         components={components}
         events={[]}
         views={['month']}
@@ -232,6 +237,12 @@ class Calendar extends React.Component {
           this.state.shownDate && this.props.canAdd ?
           this.renderDatesSelector() :
           this.renderBigCalendar()
+        }
+        {
+          !this.props.fetched &&
+          <div className='Calendar-Loading-Overlay'>
+            <CircularProgress className='Calendar-Loading' />
+          </div>
         }
       </div>
     );

@@ -11,8 +11,28 @@ $dates-selector-select-border: 2px solid #D3D3D3;
   height: 500px;
   padding: 10px 10px 25px 10px;
   margin: 0 auto;
+  position: relative;
+
+  .Calendar-Loading-Overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .Calendar-Loading {
+      color: $main-color;
+    }
+  }
 
   .rbc-calendar {
+    &.transparent {
+      opacity: 0.3;
+    }
+
     .rbc-toolbar {
       display: flex;
       justify-content: center;

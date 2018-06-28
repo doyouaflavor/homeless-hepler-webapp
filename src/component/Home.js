@@ -192,6 +192,7 @@ class Home extends Component {
                 <Calendar
                   registeredEvents={this.state.registeredEvents}
                   canAdd={false}
+                  fetched={this.state.fetched}
                 />
             </Grid>
           </Grid>

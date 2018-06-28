@@ -41,6 +41,7 @@ class Form extends React.Component {
     date:'',
     time:'',
     registeredEvents: [],
+    fetched: false,
   };
 
   async componentDidMount() {
@@ -52,6 +53,7 @@ class Form extends React.Component {
 
       this.setState({
         registeredEvents,
+        fetched: true,
       })
     } catch (err) {
       // TODO(SuJiaKuan): 錯誤處理
@@ -145,6 +147,7 @@ class Form extends React.Component {
                   <GetStepContent
                     activeStep={this.state.activeStep}
                     registeredEvents={this.state.registeredEvents}
+                    fetched={this.state.fetched}
                     callGetDate={this.getDate}
                     callGetTime={this.getTime}
                   />
