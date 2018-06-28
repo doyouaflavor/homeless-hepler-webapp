@@ -61,6 +61,15 @@ $dates-selector-select-border: 2px solid #D3D3D3;
                 cursor: default;
                 font-weight: 500;
               }
+
+              &.rbc-now {
+                a {
+                  color: white !important;
+                  background-color: $primary-color;
+                  border-radius: 50%;
+                  border: 3px solid $primary-color;
+                }
+              }
             }
           }
         }
