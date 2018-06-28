@@ -14,13 +14,6 @@ class GetStepContent extends React.Component {
 		};
 	  }
 
- 	dateSelect = (evt) => {
-		this.setState({ viewTimeForm: true });
- 	}
- 	dateReset = (evt) => {
-		this.setState({ viewTimeForm: false });
- 	}
-
 	render(){
 	  switch (this.props.activeStep) {
 	  	// 地點與日期
