@@ -1,8 +1,8 @@
 import React from 'react';
-import GetTimeDate from './GetTimeDate';
 import GetItem from './GetItem';
 import GetInfo from './GetInfo';
 import Confirm from './Confirm';
+import Calendar from './Calendar';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -13,13 +13,6 @@ class GetStepContent extends React.Component {
 			viewTimeForm: false
 		};
 	  }
-
- 	dateSelect = (evt) => {
-		this.setState({ viewTimeForm: true });
- 	}
- 	dateReset = (evt) => {
-		this.setState({ viewTimeForm: false });
- 	}
 
 	render(){
 	  switch (this.props.activeStep) {
@@ -36,12 +29,11 @@ class GetStepContent extends React.Component {
 				    </Grid>
 				    <Grid item sm={12} md={8} className="form-one-right">
 				    	<h2>日期</h2>
-				    	<GetTimeDate
-				    		viewTimeForm={this.state.viewTimeForm}
-				    		dateSelect={this.dateSelect}
-				    		dateReset={this.dateReset}
-				    		{...this.props}
-				    	/>
+                                        <Calendar
+                                          registeredEvents={this.props.registeredEvents}
+                                          canAdd={true}
+                                          fetched={this.props.fetched}
+                                        />
 				    </Grid>
 				  </Grid>
 				</div>

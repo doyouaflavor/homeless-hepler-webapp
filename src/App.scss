@@ -2,6 +2,7 @@
 
 @import "src/dist/_footer";
 @import "src/dist/_form";
+@import "src/dist/_calendar";
 
 
 .thanks {
@@ -184,6 +185,9 @@ a {
   font-size: 20px;
   color: #666666;
   margin-bottom: 2px;
+}
+.calendarpage-right {
+  padding: 50px 20px;
 }
 .log-status {
   color: white;

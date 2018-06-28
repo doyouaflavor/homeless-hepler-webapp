@@ -16,6 +16,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from '@material-ui/core/Grid';
 
+import moment from 'moment';
+import map from 'lodash/map';
+import merge from 'lodash/merge';
+
+import { getTaipeiStationEvents } from '../api/events';
+
 // Over write material-ui
 const styles = theme => ({
   stepstyle:{
@@ -34,7 +40,27 @@ class Form extends React.Component {
     activeStep: 0,
     date:'',
     time:'',
+    registeredEvents: [],
+    fetched: false,
   };
+
+  async componentDidMount() {
+    try {
+      const events = await getTaipeiStationEvents();
+      const registeredEvents = map(events, (event) => merge(event, {
+        date: moment(event.date),
+      }))
+
+      this.setState({
+        registeredEvents,
+        fetched: true,
+      })
+    } catch (err) {
+      // TODO(SuJiaKuan): 錯誤處理
+      console.error(err);
+    }
+  }
+
 
 // 獲取日期跟時間的資訊，其他的表單資訊還沒串到這裡
   getDate = (newDate) => {
@@ -120,6 +146,8 @@ class Form extends React.Component {
 {/* 判斷是哪一個填表步驟 */}
                   <GetStepContent
                     activeStep={this.state.activeStep}
+                    registeredEvents={this.state.registeredEvents}
+                    fetched={this.state.fetched}
                     callGetDate={this.getDate}
                     callGetTime={this.getTime}
                   />
