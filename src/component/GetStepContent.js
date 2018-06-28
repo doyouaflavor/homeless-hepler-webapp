@@ -29,7 +29,10 @@ class GetStepContent extends React.Component {
 				    </Grid>
 				    <Grid item sm={12} md={8} className="form-one-right">
 				    	<h2>日期</h2>
-                                        <Calendar registeredEvents={this.props.registeredEvents} />
+                                        <Calendar
+                                          registeredEvents={this.props.registeredEvents}
+                                          canAdd={true}
+                                        />
 				    </Grid>
 				  </Grid>
 				</div>

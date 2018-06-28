@@ -9,6 +9,7 @@ $dates-selector-content-padding: 13px;
 $dates-selector-select-border: 2px solid #D3D3D3;
 
 .Calendar {
+  width: 100%;
   height: 500px;
   padding: 10px 10px 25px 10px;
   margin: 0 auto;
@@ -72,6 +73,10 @@ $dates-selector-select-border: 2px solid #D3D3D3;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
+
+            &.read-only {
+              flex-direction: column-reverse;
+            }
 
             &:last-child {
               border-right: $cell-border;

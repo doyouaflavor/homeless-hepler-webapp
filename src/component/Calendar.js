@@ -16,6 +16,8 @@ import map from 'lodash/map';
 import padStart from 'lodash/padStart';
 import range from 'lodash/range';
 
+import { matchEvent } from '../utils';
+
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 BigCalendar.momentLocalizer(moment);
@@ -42,12 +44,6 @@ const getTimeStr = (date) => (
 );
 const getItemStr = (item) => `${item.name} ${item.amount}`;
 
-const matchEvent = (e0, e1) => (
-  e0.year() === e1.year() &&
-  e0.month() === e1.month() &&
-  e0.date() === e1.date()
-);
-
 class Toolbar extends BigToolbar {
   render() {
     return (
@@ -62,13 +58,14 @@ class Toolbar extends BigToolbar {
 
 class DateCellWrapper extends React.Component {
   render() {
-    const { registeredEvents, value } = this.props;
+    const { registeredEvents, canAdd, value } = this.props;
     const shownDate = moment(value);
     const matchedEvent = find(registeredEvents, ({ date }) => (
       matchEvent(date, shownDate)
     ))
     const className = classnames('rbc-day-bg', {
       'day-event': matchedEvent,
+      'read-only': !canAdd,
     });
     let title;
 
@@ -80,10 +77,13 @@ class DateCellWrapper extends React.Component {
 
     return (
       <div className={className}>
-        <AddIcon
-          className='add-event-btn'
-          onClick={() => this.props.updateShownDate(shownDate)}
-        />
+        {
+          canAdd &&
+          <AddIcon
+            className='add-event-btn'
+            onClick={() => this.props.updateShownDate(shownDate)}
+          />
+        }
         {
           matchedEvent &&
           <div className='day-event-title'>{title}</div>
@@ -129,6 +129,7 @@ class Calendar extends React.Component {
       dateCellWrapper: (props) => (
         <DateCellWrapper
           registeredEvents={this.props.registeredEvents}
+          canAdd={this.props.canAdd}
           updateShownDate={this.updateShownDate}
           {...props}
         />
@@ -228,7 +229,7 @@ class Calendar extends React.Component {
     return (
       <div className='Calendar'>
         {
-          this.state.shownDate ?
+          this.state.shownDate && this.props.canAdd ?
           this.renderDatesSelector() :
           this.renderBigCalendar()
         }

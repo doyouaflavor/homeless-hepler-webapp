@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
 import { Link, Events, animateScroll as scroll, scroller } from 'react-scroll'
-import Calendar from 'react-calendar';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,12 +11,24 @@ import Hidden from '@material-ui/core/Hidden';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
+import Calendar from './Calendar';
+
+import moment from 'moment';
+import filter from 'lodash/filter';
+import map from 'lodash/map';
+import merge from 'lodash/merge';
+
+import { getTaipeiStationEvents } from '../api/events';
+import { matchEvent } from '../utils';
+
 import WhiteLogo from '../dist/images/life_whitelogo.png';
 import { Link as Rlink} from 'react-router-dom';
 
 class Home extends Component {
   state ={
-    date: new Date()
+    date: new Date(),
+    registeredEvents: [],
+    fetched: false,
   }
 
   constructor (props){
@@ -25,13 +36,28 @@ class Home extends Component {
       this.scrollToTop = this.scrollToTop.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     Events.scrollEvent.register('begin', function() {
       console.log("begin", arguments);
     });
     Events.scrollEvent.register('end', function() {
       console.log("end", arguments);
     });
+
+    try {
+      const events = await getTaipeiStationEvents();
+      const registeredEvents = map(events, (event) => merge(event, {
+        date: moment(event.date),
+      }))
+
+      this.setState({
+        registeredEvents,
+        fetched: true,
+      })
+    } catch (err) {
+      // TODO(SuJiaKuan): 錯誤處理
+      console.error(err);
+    }
   }
 
   scrollToTop() {
@@ -75,6 +101,21 @@ class Home extends Component {
 
 
   render() {
+    let status = '讀取資料中'
+
+    if (this.state.fetched) {
+      const today = moment();
+      const matchedEvents = filter(this.state.registeredEvents, ({ date }) => (
+        matchEvent(date, today)
+      ))
+
+      if (matchedEvents.length > 0) {
+        status = `共有${matchedEvents.length}筆登記`
+      } else {
+        status = '尚未有人登記'
+      }
+    }
+
     return (
       <div>
 {/* navbar */}
@@ -139,7 +180,7 @@ class Home extends Component {
                 <p>地點</p>
                 <TextField id="margin-dense" defaultValue="台北車站"/>
                 <p>今日登記狀況</p>
-                <div className="log-status">尚未有人登記</div>
+                <div className="log-status">{status}</div>
                 <Hidden smDown>
                   <Rlink to="/form">
                     <Button variant="contained" component="span" className="calendarpage-left-button">登記發放物資</Button>
@@ -148,12 +189,10 @@ class Home extends Component {
               </Grid>
             </Grid>
             <Grid container sm={12} md={7} alignItems='center' justify='center' className="calendarpage-right">
-              <Calendar
-              onChange={this.onChange}
-              value={this.state.date}
-              tileContent=
-              {({ date, view }) => view === 'month' && date.getDay() === 3 ? <span>&nbsp;&nbsp;<i className="fas fa-people-carry"></i></span> : null}
-              />
+                <Calendar
+                  registeredEvents={this.state.registeredEvents}
+                  canAdd={false}
+                />
             </Grid>
           </Grid>
 {/* Motivation */}

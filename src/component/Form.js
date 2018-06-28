@@ -40,6 +40,7 @@ class Form extends React.Component {
     activeStep: 0,
     date:'',
     time:'',
+    registeredEvents: [],
   };
 
   async componentDidMount() {
