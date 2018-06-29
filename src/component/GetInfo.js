@@ -3,32 +3,67 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+
 import { Link as Rlink} from 'react-router-dom';
 
 class GetInfo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			giverType:'group'
+			giverType:'individual',
+			open: false,
+			errors: []
 		};
 		this.nextStep = this.nextStep.bind(this);
 		this.changeType = this.changeType.bind(this);
+		this.validate = this.validate.bind(this);
+		this.handleClose = this.handleClose.bind(this);
+	}
+
+	validate() {
+		const errors = [];
+		if (this.state.giverType === 'group') {
+			if ( this.refs.name.value === "") {
+				errors.push("尚未填寫團體名稱");
+			};
+		};
+		if (this.refs.contactName.value === "") {
+			errors.push("尚未填寫聯絡人");
+		};
+		if (this.refs.email.value === "") {
+			errors.push("尚未填寫電子信箱");
+		};
+		if (this.refs.phone.value === "") {
+			errors.push("尚未填寫聯絡電話");
+		};
+		return errors;
 	}
 
 	nextStep(event) {
 		event.preventDefault();
-		const data = {
-				giver:{
-				    type: this.refs.type.value,
-				    name: this.refs.name.value,
-				    email: this.refs.email.value,
-				    phone: this.refs.phone.value,
-				    contactName: this.refs.contactName.value,
-				    contactTitle: this.refs.contactTitle.value
-				}
-		};
-		this.props.saveValues(data);
-		this.props.handleNext();
+		const errors = this.validate();
+			if (errors.length > 0) {
+				this.setState({ errors });
+				this.setState({ open: true })
+				return;
+			} else {
+				const data = {
+						giver:{
+						    type: this.refs.type.value,
+						    name: this.refs.name.value,
+						    email: this.refs.email.value,
+						    phone: this.refs.phone.value,
+						    contactName: this.refs.contactName.value,
+						    contactTitle: this.refs.contactTitle.value
+						}
+				};
+				this.props.saveValues(data);
+				this.props.handleNext();
+			}
 	}
 
 	changeType(event) {
@@ -37,6 +72,10 @@ class GetInfo extends React.Component {
 			giverType: event.target.value
 		});
 	}
+
+	handleClose = () => {
+	this.setState({ open: false });
+	};
 
 	render () {
 		return (
@@ -53,12 +92,13 @@ class GetInfo extends React.Component {
 								defaultValue={this.props.fieldValues.giver.type}
 								onChange={this.changeType}
 							>
-								<option value="group">團體</option>
 								<option value="individual">個人</option>
+								<option value="group">團體</option>
 							</select>
 							<i className="fas fa-sort-down"></i>
 						</div>
-						{this.state.giverType === 'group' ? 
+						{this.state.giverType === 'individual' ? 
+							<input ref="name" className="none"/> :  													
 							<div className="info">
 								<h2>團體名稱</h2>
 								<input 
@@ -67,8 +107,7 @@ class GetInfo extends React.Component {
 									placeholder="團體名稱" 
 									defaultValue={this.props.fieldValues.giver.name}
 								/>
-							</div>
-						: <input ref="name" className="none"/> }
+							</div>}
 						<div className="info">
 							<h2>聯絡人</h2>
 							<input 
@@ -134,6 +173,26 @@ class GetInfo extends React.Component {
 	                  <i className="fas fa-arrow-right"></i></Button>
 	              </div>
 	            </Grid>
+				{/*輸入檢查訊息 */}
+		        <Dialog
+		          open={this.state.open}
+		          onClose={this.handleClose}
+		          aria-labelledby="alert-dialog-title"
+		          aria-describedby="alert-dialog-description"
+		        >
+		          <DialogContent>
+		            <DialogContentText id="alert-dialog-description">
+		            	{this.state.errors.map(error => (
+				          <p key={error}>{error}</p>
+				        ))}
+		            </DialogContentText>
+		          </DialogContent>
+		          <DialogActions>
+		            <Button onClick={this.handleClose} color="primary" autoFocus>
+		              Ok
+		            </Button>
+		          </DialogActions>
+		        </Dialog>
             </div>
 		);
 	}

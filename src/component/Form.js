@@ -17,15 +17,15 @@ import Hidden from '@material-ui/core/Hidden';
 let fieldValues ={
   locationId: '5b22852b0d5ab7225a23666d',
   giver:{
-    type: '團體',
-    name: null,
-    email: null,
-    phone: null,
-    contactName: null,
+    type: '個人',
+    name: "",
+    email: "",
+    phone: "",
+    contactName: "",
     contactTitle: '先生'
   },
   items:{
-    date: null,
+    date: "",
     content:{}
   }
 };

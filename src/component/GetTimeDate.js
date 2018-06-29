@@ -3,28 +3,53 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+
 import { Link as Rlink} from 'react-router-dom';
 
 class GetTimeDate extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			date: null
+			open: false,
+			date: "",
+			errors: []
 		};
 		this.nextStep = this.nextStep.bind(this);
 		this.getDate = this.getDate.bind(this);
 		this.resetDate = this.resetDate.bind(this);
+		this.validate = this.validate.bind(this);
+		this.handleClose = this.handleClose.bind(this);
 	}
+
+	validate(date) {
+		const errors = [];
+		if (this.props.fieldValues.items.date === "" && this.state.date === "" ) {
+				errors.push("您尚未提供日期或時間");
+		};
+		return errors;
+	}
+
 	nextStep(event) {
 		event.preventDefault();
-		const data = {
-				items:{
-				    date: this.state.date,
-			        content:{}
-				}
-		};
-		this.props.saveValues(data);
-		this.props.handleNext();
+		const errors = this.validate(this.state.date);
+		if (errors.length > 0) {
+			this.setState({ errors });
+			this.setState({ open: true })
+			return;
+		} else {
+			const data = {
+					items:{
+					    date: this.state.date,
+				        content:{}
+					}
+			};
+			this.props.saveValues(data);
+			this.props.handleNext();
+		}
 	}
 	getDate(event) {
 		this.setState({
@@ -37,6 +62,10 @@ class GetTimeDate extends React.Component {
 			date: ''
 		});
 	}
+
+	  handleClose = () => {
+	    this.setState({ open: false });
+	  };
 
 	render () {
 		return (
@@ -129,6 +158,24 @@ class GetTimeDate extends React.Component {
 		                  <i className="fas fa-arrow-right"></i></Button>
 		              </div>
 		            </Grid>
+					{/*輸入檢查訊息 */}
+			        <Dialog
+			          open={this.state.open}
+			          onClose={this.handleClose}
+			          aria-labelledby="alert-dialog-title"
+			          aria-describedby="alert-dialog-description"
+			        >
+			          <DialogContent>
+			            <DialogContentText id="alert-dialog-description">
+			            	{this.state.errors}
+			            </DialogContentText>
+			          </DialogContent>
+			          <DialogActions>
+			            <Button onClick={this.handleClose} color="primary" autoFocus>
+			              Ok
+			            </Button>
+			          </DialogActions>
+			        </Dialog>
 	            </div>
 		);
 	}
