@@ -103,7 +103,7 @@ class Home extends Component {
 
 {/* Join */}
           <Grid container name="join" className="root intro-page" direction='row' alignItems='center' justify='center' >
-            <Grid item sm={12} md={7} alignItems='center' justify='center' >
+            <Grid item sm={12} md={7} >
                 <Grid container className="intro-left" direction='row' alignItems='center' justify='center'>
                     <Hidden smDown>
                       <img src={WhiteLogo} alt="人生百味white-logo" className="intro-life-logo"/>
@@ -121,39 +121,45 @@ class Home extends Component {
                   </div>
                 </Grid>
             </Grid>
-            <Grid container className="intro-right" sm={12} md={5} direction="column"alignItems='center' justify='center'>
-              <Typography className="intro-content-right">我有物資想要分享</Typography>
-                <Rlink to="/form">
-                  <Button variant="contained" component="span" className="intro-button">登記發放物資</Button>              
-                </Rlink>
-              <Typography className="intro-content-right">想要參與</Typography>
-              <Typography className="intro-content-right">但不知道從何開始嗎?</Typography>
-              <Typography className="c-link-big" variant="display1">看看參與指南</Typography>
+            <Grid item sm={12} md={5} >
+              <Grid container className="intro-right" direction="column"alignItems='center' justify='center'>
+                <Typography className="intro-content-right">我有物資想要分享</Typography>
+                  <Rlink to="/form">
+                    <Button variant="contained" component="span" className="intro-button">登記發放物資</Button>              
+                  </Rlink>
+                <Typography className="intro-content-right">想要參與</Typography>
+                <Typography className="intro-content-right">但不知道從何開始嗎?</Typography>
+                <Typography className="c-link-big" variant="display1">看看參與指南</Typography>
+              </Grid>              
             </Grid>
           </Grid>
 {/* Calendar */}
           <Grid container name="calendar" className="root calendar-page" direction='row' alignItems='flex-start' justify='center'>
-            <Grid container sm={12} md={5} className="calendarpage-left"  alignItems='center' justify='center'>
-              <Grid className="calendarpage-left-content" direction='column'>
-                <h1>物資日曆</h1>           
-                <p>地點</p>
-                <TextField id="margin-dense" defaultValue="台北車站"/>
-                <p>今日登記狀況</p>
-                <div className="log-status">尚未有人登記</div>
-                <Hidden smDown>
-                  <Rlink to="/form">
-                    <Button variant="contained" component="span" className="calendarpage-left-button">登記發放物資</Button>
-                  </Rlink>
-                </Hidden>
+            <Grid item sm={12} md={5} className="calendarpage-left">
+              <Grid container alignItems='center' justify='center'>
+                <Grid className="calendarpage-left-content">
+                  <h1>物資日曆</h1>           
+                  <p>地點</p>
+                  <TextField id="margin-dense" defaultValue="台北車站"/>
+                  <p>今日登記狀況</p>
+                  <div className="log-status">尚未有人登記</div>
+                  <Hidden smDown>
+                    <Rlink to="/form">
+                      <Button variant="contained" component="span" className="calendarpage-left-button">登記發放物資</Button>
+                    </Rlink>
+                  </Hidden>
+                </Grid>
               </Grid>
             </Grid>
-            <Grid container sm={12} md={7} alignItems='center' justify='center' className="calendarpage-right">
-              <Calendar
-              onChange={this.onChange}
-              value={this.state.date}
-              tileContent=
-              {({ date, view }) => view === 'month' && date.getDay() === 3 ? <span>&nbsp;&nbsp;<i className="fas fa-people-carry"></i></span> : null}
-              />
+            <Grid item sm={12} md={7}>
+              <Grid container alignItems='center' justify='center' className="calendarpage-right">
+                <Calendar
+                onChange={this.onChange}
+                value={this.state.date}
+                tileContent=
+                {({ date, view }) => view === 'month' && date.getDay() === 3 ? <span>&nbsp;&nbsp;<i className="fas fa-people-carry"></i></span> : null}
+                />
+              </Grid>
             </Grid>
           </Grid>
 {/* Motivation */}
