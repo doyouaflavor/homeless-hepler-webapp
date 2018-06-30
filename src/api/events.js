@@ -11,7 +11,10 @@ async function getTaipeiStationEvents() {
   const locationId = locations.data[0]._id;
   const result = await queryEvents({ locationId });
 
-  return result.data;
+  return {
+    locationId,
+    events: result.data,
+  };
 }
 
 export {
