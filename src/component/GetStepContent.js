@@ -5,31 +5,12 @@ import GetInfo from './GetInfo';
 import Confirm from './Confirm';
 
 class GetStepContent extends React.Component {
-	constructor(props) {
-	    super(props);
-		this.state = {
-			viewTimeForm: false
-		};
-	  }
-
- 	dateSelect = (evt) => {
-		this.setState({ viewTimeForm: true });
- 	}
- 	dateReset = (evt) => {
-		this.setState({ viewTimeForm: false });
- 	}
 
 	render(){
 	  switch (this.props.activeStep) {
 	  	// 地點與日期
 	    case 0:
-	    	return (
-			    	<GetTimeDate
-			    		viewTimeForm={this.state.viewTimeForm}
-			    		dateSelect={this.dateSelect}
-			    		dateReset={this.dateReset}
-			    		{...this.props}
-			    	/> );
+	      return ( <GetTimeDate {...this.props} /> );
 	    // 物資
 	    case 1:
 	      return ( <GetItem {...this.props}/> );

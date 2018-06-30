@@ -8,6 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+import Calendar from './Calendar';
+
 import { Link as Rlink} from 'react-router-dom';
 
 class GetTimeDate extends React.Component {
@@ -81,61 +83,11 @@ class GetTimeDate extends React.Component {
 					    </Grid>
 					    <Grid item sm={12} md={8} className="form-one-right">
 					    	<h2>日期</h2>
-					    		{( () => {
-									switch (this.props.viewTimeForm) {
-										// 時間
-										case true:
-										  return (
-										    <div className="form-time">
-										    	<div className="form-time-title">2018年7月3日 (星期二) 
-										    		<span 
-											    		onClick={(event) => {this.props.dateReset(); this.resetDate();}} 
-											    		className="form-time-little">
-											    		重選日期
-										    		</span>
-										    	</div>
-										    	<Grid container direction="row" justify="space-between">
-										    		<Grid item sm={12} md={6} className="time-select">
-										    			<h3>您預計發放的時間</h3>
-										    			<input 
-															type="text" 
-															ref="time" 
-															placeholder="(例： 18:00)" 
-										    			/>
-										    		</Grid>
-										    		<Grid item sm={12} md={6} className="form-time-current">
-										    			<h3>當天已有的登記</h3>
-										    			<Grid container direction="row" className="current-item">
-										    				<Grid item sm={4} md={4}>
-										    					<h4>12:00</h4>
-										    				</Grid>
-										    				<Grid item sm={8} md={8}>
-										    					<h4>便當 20個</h4>
-										    					<h4>飲料 20杯</h4>
-										    				</Grid>
-										    			</Grid>
-										    		</Grid>
-										    	</Grid>
-										    </div>
-										  );
-										// 日期
-										default:
-										  return (
-										  	<div>
-												{/* 這裡放日曆 */}
-												<input 
-													type="text" 
-													ref="date" 
-													placeholder="這裡改日曆" 
-													defaultValue={this.props.fieldValues.items.date}
-													onChange={this.getDate}
-												/>
-											    <Button onClick={this.props.dateSelect}>送出日期</Button>
-										  	</div>
-										  );
-										}
-					    			}
-					    		)()}
+                                                <Calendar
+                                                  registeredEvents={this.props.registeredEvents}
+                                                  canAdd={true}
+                                                  fetched={this.props.fetched}
+                                                />
 						    </Grid>
 						  </Grid>
 						</div>

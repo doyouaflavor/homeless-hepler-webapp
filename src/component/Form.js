@@ -14,6 +14,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Hidden from '@material-ui/core/Hidden';
 
+import moment from 'moment';
+import map from 'lodash/map';
+import merge from 'lodash/merge';
+
+import { getTaipeiStationEvents } from '../api/events';
+
 let fieldValues ={
   locationId: '5b22852b0d5ab7225a23666d',
   giver:{
@@ -29,6 +35,7 @@ let fieldValues ={
     content:{}
   }
 };
+
 // Over write material-ui
 const styles = theme => ({
   stepstyle:{
@@ -45,7 +52,47 @@ class Form extends React.Component {
 
   state = {
     activeStep: 0,
+    date:'',
+    time:'',
+    registeredEvents: [],
+    fetched: false,
   };
+
+  async componentDidMount() {
+    try {
+      const events = await getTaipeiStationEvents();
+      const registeredEvents = map(events, (event) => merge(event, {
+        date: moment(event.date),
+      }))
+
+      this.setState({
+        registeredEvents,
+        fetched: true,
+      })
+    } catch (err) {
+      // TODO(SuJiaKuan): 錯誤處理
+      console.error(err);
+    }
+  }
+
+
+// 獲取日期跟時間的資訊，其他的表單資訊還沒串到這裡
+  getDate = (newDate) => {
+      this.setState({
+        date: newDate,
+      }, function() {
+          console.log('date:' + this.state.date);
+      })
+  };
+  getTime = (newTime) => {
+      this.setState({
+        time: newTime,
+      }, function() {
+          console.log('time:' + this.state.time);
+      })
+  };
+
+
 //按鈕控制
   saveValues = (fields) => {
       return function() {
@@ -126,6 +173,8 @@ class Form extends React.Component {
                     handleNext={this.handleNext}
                     handleBack={this.handleBack}
                     fieldValues={fieldValues}
+                    registeredEvents={this.state.registeredEvents}
+                    fetched={this.state.fetched}
                   />
               </div>
             )}
