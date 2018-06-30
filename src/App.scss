@@ -72,6 +72,9 @@
   padding: 2px;
   height: 100%;
 }
+.none {
+  display: none;
+}
 /*initial design*/
 h1{
   font-size: 56px;
@@ -172,6 +175,7 @@ a {
   min-height: 648px;
 }
 .calendarpage-left {
+  width: 100%;
   min-height: 648px;
   background-color: $main-color;
   height: 100%;

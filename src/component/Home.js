@@ -144,7 +144,7 @@ class Home extends Component {
 
 {/* Join */}
           <Grid container name="join" className="root intro-page" direction='row' alignItems='center' justify='center' >
-            <Grid item sm={12} md={7} alignItems='center' justify='center' >
+            <Grid item sm={12} md={7} >
                 <Grid container className="intro-left" direction='row' alignItems='center' justify='center'>
                     <Hidden smDown>
                       <img src={WhiteLogo} alt="人生百味white-logo" className="intro-life-logo"/>
@@ -162,14 +162,16 @@ class Home extends Component {
                   </div>
                 </Grid>
             </Grid>
-            <Grid container className="intro-right" sm={12} md={5} direction="column"alignItems='center' justify='center'>
-              <Typography className="intro-content-right">我有物資想要分享</Typography>
-                <Rlink to="/form">
-                  <Button variant="contained" component="span" className="intro-button">登記發放物資</Button>              
-                </Rlink>
-              <Typography className="intro-content-right">想要參與</Typography>
-              <Typography className="intro-content-right">但不知道從何開始嗎?</Typography>
-              <Typography className="c-link-big" variant="display1">看看參與指南</Typography>
+            <Grid item sm={12} md={5} >
+              <Grid container className="intro-right" direction="column"alignItems='center' justify='center'>
+                <Typography className="intro-content-right">我有物資想要分享</Typography>
+                  <Rlink to="/form">
+                    <Button variant="contained" component="span" className="intro-button">登記發放物資</Button>              
+                  </Rlink>
+                <Typography className="intro-content-right">想要參與</Typography>
+                <Typography className="intro-content-right">但不知道從何開始嗎?</Typography>
+                <Typography className="c-link-big" variant="display1">看看參與指南</Typography>
+              </Grid>              
             </Grid>
           </Grid>
 {/* Calendar */}

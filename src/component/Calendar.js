@@ -15,7 +15,9 @@ import find from 'lodash/find';
 import filter from 'lodash/filter';
 import map from 'lodash/map';
 import padStart from 'lodash/padStart';
+import parseInt from 'lodash/parseInt';
 import range from 'lodash/range';
+import split from 'lodash/split';
 
 import { matchEvent } from '../utils';
 
@@ -101,23 +103,39 @@ class Calendar extends React.Component {
     selectedTime: GIVE_TIME[0],
   }
 
-  updateShownDate = (shownDate) => {
+  updateState = (shownDate, selectedTime) => {
     this.setState({
       shownDate,
+      selectedTime,
     });
+
+    if (!shownDate) {
+      this.setDate(null)
+    } else {
+      const splitTime = split(selectedTime, ':');
+      const hour = parseInt(splitTime[0]);
+      const minute = parseInt(splitTime[1]);
+      const date = moment(shownDate).set({
+        hour,
+        minute,
+      });
+
+      this.props.setDate({
+        date,
+      });
+    }
+  }
+
+  updateShownDate = (shownDate) => {
+    this.updateState(shownDate, this.state.selectedTime);
   }
 
   handleResetClick = () => {
-    this.setState({
-      shownDate: null,
-      selectedTime: GIVE_TIME[0],
-    })
+    this.updateState(null, GIVE_TIME[0]);
   }
 
   handleSelectedTimeChange = (e) => {
-    this.setState({
-      selectedTime: e.target.value,
-    });
+    this.updateState(this.state.shownDate, e.target.value);
   }
 
   renderBigCalendar() {

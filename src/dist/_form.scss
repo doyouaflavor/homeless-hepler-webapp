@@ -39,6 +39,9 @@
 .button-right-block {
 	display: flex;
 }
+.button-right-block.flex-end {
+	margin-left: 20px;
+}
 .formbutton-back {
 	font-size: 16px !important;
 	letter-spacing: 4px;
