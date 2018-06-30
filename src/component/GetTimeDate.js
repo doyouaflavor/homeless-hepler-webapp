@@ -17,19 +17,17 @@ class GetTimeDate extends React.Component {
 		super(props);
 		this.state = {
 			open: false,
-			date: "",
+			date: null,
 			errors: []
 		};
 		this.nextStep = this.nextStep.bind(this);
-		this.getDate = this.getDate.bind(this);
-		this.resetDate = this.resetDate.bind(this);
 		this.validate = this.validate.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 	}
 
 	validate(date) {
 		const errors = [];
-		if (this.props.fieldValues.items.date === "" && this.state.date === "" ) {
+		if (!this.state.date) {
 				errors.push("您尚未提供日期或時間");
 		};
 		return errors;
@@ -53,17 +51,12 @@ class GetTimeDate extends React.Component {
 			this.props.handleNext();
 		}
 	}
-	getDate(event) {
-		this.setState({
-			date: event.target.value
-		});
-	}
 
-	resetDate = (event) => {
-		this.setState({
-			date: ''
-		});
-	}
+        setDate = (date) => {
+          this.setState({
+            date,
+          });
+        }
 
 	  handleClose = () => {
 	    this.setState({ open: false });
@@ -87,6 +80,7 @@ class GetTimeDate extends React.Component {
                                                   registeredEvents={this.props.registeredEvents}
                                                   canAdd={true}
                                                   fetched={this.props.fetched}
+                                                  setDate={this.setDate}
                                                 />
 						    </Grid>
 						  </Grid>
