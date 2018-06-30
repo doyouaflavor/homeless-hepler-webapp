@@ -3,6 +3,12 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import { withStyles } from '@material-ui/core/styles';
+
 import { Link as Rlink} from 'react-router-dom';
 
 import moment from 'moment';
@@ -12,28 +18,62 @@ import { createEvents } from '../api/events'
 import { getDateStr, getTimeStr } from '../utils';
 import { GIVER_TYPES, CONTACT_TITLES } from '../const';
 
+const styles = {
+  confirmButton: {
+    color: '#F7B815',
+    fontWeight: '200'
+  },
+  cancleButton: {
+  	color: '#666666',
+  	fontWeight: '200'
+  },
+  button: {
+  	backgroundColor: '#F7B815'
+  }
+};
+
 class Confirm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-		  confirmStatus: false,
-                  creating: false,
+			openCancelDialog:false,
+	  		confirmStatus: false,
+	  		open: false,
+                        creating: false,
 		};
-
-		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleCheck = this.handleCheck.bind(this);
+		this.handleClose = this.handleClose.bind(this);
+		this.handleCancelDialogOpen = this.handleCancelDialogOpen.bind(this);
+		this.handleCancelDialogClose = this.handleCancelDialogClose.bind(this);
 	}
 
-	handleInputChange(event) {
-		this.setState({
-
-		});
+	handleCheck(event) {
+		this.setState({ confirmStatus: !this.state.confirmStatus});
 	}
 
-        handleConfirmBtnClick = async () => {
+	handleClose = () => {
+		this.setState({ open: false });
+	}
+
+	handleCancelDialogOpen = (event) =>{
+		this.setState({ openCancelDialog: true });
+	}
+
+	handleCancelDialogClose = (event) => {
+		this.setState({ openCancelDialog: false });
+	}
+
+        handleConfirmBtnClick = async (event) => {
+		event.preventDefault();
+
+		if (this.state.confirmStatus === false) {
+			this.setState({open:true});
+                        return;
+		}
+
                 this.setState({
                         creating: true,
                 });
-                console.log(this.props.fieldValues.giver.email)
 
                 try {
                         await createEvents(this.props.fieldValues)
@@ -135,7 +175,7 @@ class Confirm extends React.Component {
 						</Grid>
 					</Grid>
 					<div className='confirm-term'>
-						<input type="checkbox"/>
+						<input type="checkbox" onClick={this.handleCheck}/>
 						<h1>同意條款</h1>
 					</div>
 		           </div>
@@ -146,24 +186,67 @@ class Confirm extends React.Component {
 				    <i className="fas fa-arrow-left"></i> 
 				    上一步</Button>
 				  <Hidden smUp>
-				    <Rlink to="/">
-				      <div className="cancle-log">取消登記</div>
-				    </Rlink>
+					<div className="cancle-log" onClick={this.handleCancelDialogOpen}>取消登記</div>
 				  </Hidden>
 				  <div className="button-right-block">
 				    <Hidden xsDown>
-				      <Rlink to="/">
-				        <div className="cancle-log">取消登記</div>
-				      </Rlink>
+				    	<div className="cancle-log" onClick={this.handleCancelDialogOpen}>取消登記</div>
 				    </Hidden>
-				    <Button variant="contained" color="primary" onClick={this.handleConfirmBtnClick} className="formbutton-next" disabled={nextBtnDisalbed}>
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      onClick={this.handleConfirmBtnClick}
+                                      className={`formbutton-next ${this.props.classes.button}`}
+                                      disabled={nextBtnDisalbed}
+                                    >
 				      確認登記
 				      <i className="fas fa-arrow-right"></i></Button>
 				  </div>
 				</Grid>
+				{/*輸入檢查訊息 */}
+		        <Dialog
+		          open={this.state.open}
+		          onClose={this.handleClose}
+		          aria-labelledby="alert-dialog-title"
+		          aria-describedby="alert-dialog-description"
+		        >
+		          <DialogContent>
+		            <DialogContentText id="alert-dialog-description">
+		            	請勾選同意條款
+		            </DialogContentText>
+		          </DialogContent>
+		          <DialogActions>
+		            <Button onClick={this.handleClose} color="primary" autoFocus>
+		              Ok
+		            </Button>
+		          </DialogActions>
+		        </Dialog>
+		    	{/*取消確認視窗 */}
+		        <Dialog
+		          open={this.state.openCancelDialog}
+		          onClose={this.handleCancelDialogClose}
+		          aria-labelledby="alert-dialog-title"
+		          aria-describedby="alert-dialog-description"
+		        >
+		          <DialogContent>
+		            <DialogContentText id="alert-dialog-description">
+		            	您即將取消登記，已經填的資料可能會遺失。
+		            </DialogContentText>
+		          </DialogContent>
+		          <DialogActions>
+		            <Button onClick={this.handleCancelDialogClose} className={this.props.classes.confirmButton} autoFocus>
+		              繼續登記
+		            </Button>
+		            <Rlink to="/">
+			            <Button className={this.props.classes.cancleButton} autoFocus>
+			              取消登記
+			            </Button>
+		            </Rlink>
+		          </DialogActions>
+		        </Dialog>
 			</div>
 		);
 	}
 }
 
-export default Confirm;
+export default withStyles(styles)(Confirm);

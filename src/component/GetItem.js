@@ -7,15 +7,32 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import { Link as Rlink} from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
 
 import map from 'lodash/map';
 import some from 'lodash/some';
+
+import { Link as Rlink} from 'react-router-dom';
+
+const styles = {
+  confirmButton: {
+    color: '#F7B815',
+    fontWeight: '200'
+  },
+  cancleButton: {
+    color: '#666666',
+    fontWeight: '200'
+  },
+  button: {
+    backgroundColor: '#F7B815'
+  }
+};
 
 class GetItem extends React.Component {
   constructor() {
     super();
     this.state = {
+      openCancelDialog:false,
       content: [{ name: '', amount: '', description: '' }],
       open: false,
     };
@@ -62,6 +79,10 @@ class GetItem extends React.Component {
       this.props.saveContentValues(data);
       this.props.handleNext();
     }
+  }
+
+  handleCancelDialogClose = (event) => {
+    this.setState({ openCancelDialog: false });
   }
 
   render() {    
@@ -147,21 +168,40 @@ class GetItem extends React.Component {
               <i className="fas fa-arrow-left"></i> 
               上一步</Button>
             <Hidden smUp>
-              <Rlink to="/">
-                <div className="cancle-log">取消登記</div>
-              </Rlink>
+              <div className="cancle-log" onClick={this.handleCancelDialogOpen}>取消登記</div>
             </Hidden>
             <div className="button-right-block">
               <Hidden xsDown>
-                <Rlink to="/">
-                  <div className="cancle-log">取消登記</div>
-                </Rlink>
+                <div className="cancle-log" onClick={this.handleCancelDialogOpen}>取消登記</div>
               </Hidden>
-              <Button variant="contained" color="primary" onClick={this.nextStep} className="formbutton-next">
+              <Button variant="contained" color="primary" onClick={this.nextStep} className={`formbutton-next ${this.props.classes.button}`}>
                 下一步
                 <i className="fas fa-arrow-right"></i></Button>
             </div>
           </Grid>
+          {/*取消確認視窗 */}
+            <Dialog
+              open={this.state.openCancelDialog}
+              onClose={this.handleCancelDialogClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  您即將取消登記，已經填的資料可能會遺失。
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleCancelDialogClose} className={this.props.classes.confirmButton} autoFocus>
+                  繼續登記
+                </Button>
+                <Rlink to="/">
+                  <Button className={this.props.classes.cancleButton} autoFocus>
+                    取消登記
+                  </Button>
+                </Rlink>
+              </DialogActions>
+            </Dialog>
           {/*輸入檢查訊息 */}
           <Dialog
             open={this.state.open}
@@ -187,4 +227,4 @@ class GetItem extends React.Component {
   }
 }
 
-export default GetItem;
+export default withStyles(styles)(GetItem);

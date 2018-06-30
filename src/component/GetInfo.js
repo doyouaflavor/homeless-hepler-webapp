@@ -7,6 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import { withStyles } from '@material-ui/core/styles';
 
 import validator from 'validator';
 import map from 'lodash/map';
@@ -15,10 +16,26 @@ import { GIVER_TYPES, CONTACT_TITLES } from '../const';
 
 import { Link as Rlink} from 'react-router-dom';
 
+
+const styles = {
+  confirmButton: {
+    color: '#F7B815',
+    fontWeight: '200'
+  },
+  cancleButton: {
+  	color: '#666666',
+  	fontWeight: '200'
+  },
+  button: {
+  	backgroundColor: '#F7B815'
+  }
+};
+
 class GetInfo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			openCancelDialog:false,
 			giverType: 'person',
                         name: '',
                         contactName: '',
@@ -26,12 +43,14 @@ class GetInfo extends React.Component {
                         email: '',
                         phone: '',
 			open: false,
-			errors: []
+			errors: [],
 		};
 		this.nextStep = this.nextStep.bind(this);
 		this.changeType = this.changeType.bind(this);
 		this.validate = this.validate.bind(this);
 		this.handleClose = this.handleClose.bind(this);
+		this.handleCancelDialogOpen = this.handleCancelDialogOpen.bind(this);
+		this.handleCancelDialogClose = this.handleCancelDialogClose.bind(this);
 	}
 
 	validate() {
@@ -130,7 +149,15 @@ class GetInfo extends React.Component {
 
 	handleClose = () => {
 	this.setState({ open: false });
-	};
+	}
+
+	handleCancelDialogOpen = (event) =>{
+		this.setState({ openCancelDialog: true });
+	}
+
+	handleCancelDialogClose = (event) => {
+		this.setState({ openCancelDialog: false });
+	}
 
 	render () {
 		return (
@@ -230,17 +257,13 @@ class GetInfo extends React.Component {
 	                <i className="fas fa-arrow-left"></i> 
 	                上一步</Button>
 	              <Hidden smUp>
-	                <Rlink to="/">
-	                  <div className="cancle-log">取消登記</div>
-	                </Rlink>
+	              	<div className="cancle-log" onClick={this.handleCancelDialogOpen}>取消登記</div>
 	              </Hidden>
 	              <div className="button-right-block">
 	                <Hidden xsDown>
-	                  <Rlink to="/">
-	                    <div className="cancle-log">取消登記</div>
-	                  </Rlink>
+	                	<div className="cancle-log" onClick={this.handleCancelDialogOpen}>取消登記</div>
 	                </Hidden>
-	                <Button variant="contained" color="primary" onClick={this.nextStep} className="formbutton-next">
+	                <Button variant="contained" color="primary" onClick={this.nextStep} className={`formbutton-next ${this.props.classes.button}`}>
 	                  下一步
 	                  <i className="fas fa-arrow-right"></i></Button>
 	              </div>
@@ -265,9 +288,32 @@ class GetInfo extends React.Component {
 		            </Button>
 		          </DialogActions>
 		        </Dialog>
+		    	{/*取消確認視窗 */}
+		        <Dialog
+		          open={this.state.openCancelDialog}
+		          onClose={this.handleCancelDialogClose}
+		          aria-labelledby="alert-dialog-title"
+		          aria-describedby="alert-dialog-description"
+		        >
+		          <DialogContent>
+		            <DialogContentText id="alert-dialog-description">
+		            	您即將取消登記，已經填的資料可能會遺失。
+		            </DialogContentText>
+		          </DialogContent>
+		          <DialogActions>
+		            <Button onClick={this.handleCancelDialogClose} className={this.props.classes.confirmButton} autoFocus>
+		              繼續登記
+		            </Button>
+		            <Rlink to="/">
+			            <Button className={this.props.classes.cancleButton} autoFocus>
+			              取消登記
+			            </Button>
+		            </Rlink>
+		          </DialogActions>
+		        </Dialog>
             </div>
 		);
 	}
 }
 
-export default GetInfo;
+export default  withStyles(styles)(GetInfo);
