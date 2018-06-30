@@ -19,21 +19,12 @@ import parseInt from 'lodash/parseInt';
 import range from 'lodash/range';
 import split from 'lodash/split';
 
-import { matchEvent } from '../utils';
+import { matchEvent, getTimeStr } from '../utils';
+import { ZH_WEEKDAY } from '../const';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 BigCalendar.momentLocalizer(moment);
-
-const ZH_WEEKDAY = [
-  '日',
-  '一',
-  '二',
-  '三',
-  '四',
-  '五',
-  '六',
-];
 
 const GIVE_TIME = map(range(48), (idx) => {
   const hour = parseInt(idx / 2, 10);
@@ -42,9 +33,6 @@ const GIVE_TIME = map(range(48), (idx) => {
   return `${padStart(hour, 2, '0')}:${padStart(minute, 2, '0')}`;
 });
 
-const getTimeStr = (date) => (
-  `${padStart(date.hour(), 2, '0')}：${padStart(date.minute(), 2, '0')}`
-);
 const getItemStr = (item) => `${item.name} ${item.amount}`;
 
 class Toolbar extends BigToolbar {
@@ -110,7 +98,7 @@ class Calendar extends React.Component {
     });
 
     if (!shownDate) {
-      this.setDate(null)
+      this.props.setDate(null)
     } else {
       const splitTime = split(selectedTime, ':');
       const hour = parseInt(splitTime[0]);
@@ -120,9 +108,7 @@ class Calendar extends React.Component {
         minute,
       });
 
-      this.props.setDate({
-        date,
-      });
+      this.props.setDate(date.toISOString());
     }
   }
 

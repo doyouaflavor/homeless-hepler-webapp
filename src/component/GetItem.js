@@ -16,7 +16,6 @@ class GetItem extends React.Component {
     
   handleAddContent = () => {
     this.setState({ content: this.state.content.concat([{ name: '', amount: '', description: '' }]) });
-    console.log(this.state.content);
   }
   
   handleRemoveContent = (idx) => () => {

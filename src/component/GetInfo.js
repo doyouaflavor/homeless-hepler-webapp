@@ -8,13 +8,23 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+import validator from 'validator';
+import map from 'lodash/map';
+
+import { GIVER_TYPES, CONTACT_TITLES } from '../const';
+
 import { Link as Rlink} from 'react-router-dom';
 
 class GetInfo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			giverType:'individual',
+			giverType: 'person',
+                        name: '',
+                        contactName: '',
+                        contactTitle: 'Mr.',
+                        email: '',
+                        phone: '',
 			open: false,
 			errors: []
 		};
@@ -26,20 +36,24 @@ class GetInfo extends React.Component {
 
 	validate() {
 		const errors = [];
-		if (this.state.giverType === 'group') {
-			if ( this.refs.name.value === "") {
-				errors.push("尚未填寫團體名稱");
-			};
-		};
-		if (this.refs.contactName.value === "") {
+		if (this.state.giverType === 'organization' && this.state.name === '') {
+                        errors.push("尚未填寫團體名稱");
+		}
+		if (this.state.giverType === 'store' && this.state.name === '') {
+                        errors.push("尚未填寫商家名稱");
+		}
+		if (this.state.contactName === '') {
 			errors.push("尚未填寫聯絡人");
-		};
-		if (this.refs.email.value === "") {
+		}
+		if (this.state.email === '') {
 			errors.push("尚未填寫電子信箱");
-		};
-		if (this.refs.phone.value === "") {
+		}
+		if (!validator.isEmail(this.state.email)) {
+			errors.push("電子信箱格式錯誤");
+		}
+		if (this.state.phone === '') {
 			errors.push("尚未填寫聯絡電話");
-		};
+		}
 		return errors;
 	}
 
@@ -51,27 +65,68 @@ class GetInfo extends React.Component {
 				this.setState({ open: true })
 				return;
 			} else {
-				const data = {
-						giver:{
-						    type: this.refs.type.value,
-						    name: this.refs.name.value,
-						    email: this.refs.email.value,
-						    phone: this.refs.phone.value,
-						    contactName: this.refs.contactName.value,
-						    contactTitle: this.refs.contactTitle.value
-						}
-				};
-				this.props.saveValues(data);
+                                const {
+                                        giverType,
+                                        name,
+                                        contactName,
+                                        contactTitle,
+                                        email,
+                                        phone,
+                                } = this.state;
+                                const giver = {
+                                        type: giverType,
+                                        name: giverType === 'person' ? contactName : name,
+                                        contactName,
+                                        contactTitle,
+                                        email,
+                                        phone,
+                                };
+
+				this.props.saveGiverValues(giver);
 				this.props.handleNext();
 			}
 	}
 
 	changeType(event) {
 		event.preventDefault();
+
+                const { value } = event.target;
+
 		this.setState({
-			giverType: event.target.value
+		        giverType: event.target.value,
+                        name: value === 'person' ? '' : this.state.name,
 		});
 	}
+
+        handleNameChange = (event) => {
+                this.setState({
+                        name: event.target.value,
+                });
+        }
+
+        handleContactNameChange = (event) => {
+                this.setState({
+                        contactName: event.target.value,
+                });
+        }
+
+        handleContactTitleChange = (event) => {
+                this.setState({
+                        contactTitle: event.target.value,
+                });
+        }
+
+        handleEmailChange = (event) => {
+                this.setState({
+                        email: event.target.value,
+                });
+        }
+
+        handlePhoneChange = (event) => {
+                this.setState({
+                        phone: event.target.value,
+                });
+        }
 
 	handleClose = () => {
 	this.setState({ open: false });
@@ -89,23 +144,30 @@ class GetInfo extends React.Component {
 							<select 
 								type="text" 
 								ref="type" 
-								defaultValue={this.props.fieldValues.giver.type}
+                                                                value={this.state.giverType}
 								onChange={this.changeType}
 							>
-								<option value="individual">個人</option>
-								<option value="group">團體</option>
+                                                                {map(GIVER_TYPES, (shownValue, value) => (
+                                                                        <option
+                                                                          key={value}
+                                                                          value={value}
+                                                                        >
+                                                                                {shownValue}
+                                                                        </option>
+                                                                ))}
 							</select>
 							<i className="fas fa-sort-down"></i>
 						</div>
-						{this.state.giverType === 'individual' ? 
-							<input ref="name" className="none"/> :  													
+						{this.state.giverType === 'person' ? 
+							<input ref="name" className="none"/> :
 							<div className="info">
-								<h2>團體名稱</h2>
+								<h2>{this.state.giverType === 'organization' ? '團體名稱' : '商家名稱'}</h2>
 								<input 
 									type="text" 
 									ref="name"
-									placeholder="團體名稱" 
-									defaultValue={this.props.fieldValues.giver.name}
+									placeholder={this.state.giverType === 'organization' ? '團體名稱' : '商家名稱'}
+                                                                        value={this.state.name}
+                                                                        onChange={this.handleNameChange}
 								/>
 							</div>}
 						<div className="info">
@@ -114,16 +176,24 @@ class GetInfo extends React.Component {
 								type="text" 
 								ref="contactName" 
 								placeholder="姓名" 
-								defaultValue={this.props.fieldValues.giver.contactName}
+                                                                value={this.state.contactName}
+                                                                onChange={this.handleContactNameChange}
 							/>
 							<select 
 								type="text" 
 								ref="contactTitle"
-								defaultValue={this.props.fieldValues.giver.contactTitle}
 								className="padding" 
+                                                                value={this.state.contactTitle}
+                                                                onChange={this.handleContactTitleChange}
 							>
-								<option value="mr">先生</option>
-								<option value="miss">女士</option>
+                                                                {map(CONTACT_TITLES, (shownValue, value) => (
+                                                                        <option
+                                                                          key={value}
+                                                                          value={value}
+                                                                        >
+                                                                                {shownValue}
+                                                                        </option>
+                                                                ))}
 							</select>
 							<i className="fas fa-sort-down"></i>
 						</div>
@@ -134,8 +204,9 @@ class GetInfo extends React.Component {
 								type="text" 
 								ref="email"
 								placeholder="電子信箱" 
-								defaultValue={this.props.fieldValues.giver.email}
 								className="more-width"
+                                                                value={this.state.email}
+                                                                onChange={this.handleEmailChange}
 							/>
 						</div>
 
@@ -145,7 +216,8 @@ class GetInfo extends React.Component {
 								type="text" 
 								ref="phone"
 								placeholder="電話"  
-								defaultValue={this.props.fieldValues.giver.phone}
+                                                                value={this.state.phone}
+                                                                onChange={this.handlePhoneChange}
 							/>
 							<h4>人生百味工作人員可能會在事後與您電話連絡確認捐贈事宜</h4>
 						</div>

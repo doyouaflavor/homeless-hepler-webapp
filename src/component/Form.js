@@ -21,19 +21,12 @@ import merge from 'lodash/merge';
 import { getTaipeiStationEvents } from '../api/events';
 
 let fieldValues ={
-  locationId: '5b22852b0d5ab7225a23666d',
-  giver:{
-    type: '個人',
-    name: "",
-    email: "",
-    phone: "",
-    contactName: "",
-    contactTitle: '先生'
-  },
-  items:{
-    date: "",
-    content:{}
-  }
+  locationId: '',
+  giver: {},
+  items: [{
+    date: '',
+    content: [],
+  }],
 };
 
 // Over write material-ui
@@ -52,18 +45,18 @@ class Form extends React.Component {
 
   state = {
     activeStep: 0,
-    date:'',
-    time:'',
     registeredEvents: [],
     fetched: false,
   };
 
   async componentDidMount() {
     try {
-      const events = await getTaipeiStationEvents();
-      const registeredEvents = map(events, (event) => merge(event, {
+      const result = await getTaipeiStationEvents();
+      const registeredEvents = map(result.events, (event) => merge(event, {
         date: moment(event.date),
       }))
+
+      fieldValues.locationId = result.locationId;
 
       this.setState({
         registeredEvents,
@@ -75,42 +68,21 @@ class Form extends React.Component {
     }
   }
 
-
-// 獲取日期跟時間的資訊，其他的表單資訊還沒串到這裡
-  getDate = (newDate) => {
-      this.setState({
-        date: newDate,
-      }, function() {
-          console.log('date:' + this.state.date);
-      })
-  };
-  getTime = (newTime) => {
-      this.setState({
-        time: newTime,
-      }, function() {
-          console.log('time:' + this.state.time);
-      })
-  };
-
-
 //按鈕控制
-  saveValues = (fields) => {
-      return function() {
-        fieldValues = Object.assign({},fieldValues, fields)
-      }.bind(this)();
-    };
+  saveDateValues = (fields) => {
+    fieldValues.items[0].date = fields;
+  }
   saveContentValues = (fields) => {
-      return function() {
-        fieldValues.items.content = Object.assign({}, fieldValues.items.content, fields)
-      }.bind(this)();
-    };
+    fieldValues.items[0].content =  fields;
+  }
+  saveGiverValues = (fields) => {
+    fieldValues.giver = fields;
+  }
 
   handleNext = () => {
     const { activeStep } = this.state;
     this.setState({
       activeStep: activeStep + 1,
-    },function() {
-        console.log(fieldValues);
     });
   };
 
@@ -168,8 +140,9 @@ class Form extends React.Component {
               {/* 表單內容 */}
                   <GetStepContent
                     activeStep={this.state.activeStep}
-                    saveValues={this.saveValues}
+                    saveDateValues={this.saveDateValues}
                     saveContentValues={this.saveContentValues}
+                    saveGiverValues={this.saveGiverValues}
                     handleNext={this.handleNext}
                     handleBack={this.handleBack}
                     fieldValues={fieldValues}
