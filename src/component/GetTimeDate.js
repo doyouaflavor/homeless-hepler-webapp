@@ -60,13 +60,7 @@ class GetTimeDate extends React.Component {
 			this.setState({ open: true })
 			return;
 		} else {
-			const data = {
-					items:{
-					    date: this.state.date,
-				        content:{}
-					}
-			};
-			this.props.saveValues(data);
+			this.props.saveDateValues(this.state.date);
 			this.props.handleNext();
 		}
 	}

@@ -11,6 +11,13 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { Link as Rlink} from 'react-router-dom';
 
+import moment from 'moment';
+import map from 'lodash/map';
+
+import { createEvents } from '../api/events'
+import { getDateStr, getTimeStr } from '../utils';
+import { GIVER_TYPES, CONTACT_TITLES } from '../const';
+
 const styles = {
   confirmButton: {
     color: '#F7B815',
@@ -31,26 +38,17 @@ class Confirm extends React.Component {
 		this.state = {
 			openCancelDialog:false,
 	  		confirmStatus: false,
-	  		open: false
+	  		open: false,
+                        creating: false,
 		};
 		this.handleCheck = this.handleCheck.bind(this);
 		this.handleClose = this.handleClose.bind(this);
-		this.nextStep = this.nextStep.bind(this);
 		this.handleCancelDialogOpen = this.handleCancelDialogOpen.bind(this);
 		this.handleCancelDialogClose = this.handleCancelDialogClose.bind(this);
 	}
 
 	handleCheck(event) {
 		this.setState({ confirmStatus: !this.state.confirmStatus});
-	}
-
-	nextStep(event) {
-		event.preventDefault();
-		if (this.state.confirmStatus === false) {
-			this.setState({open:true});
-			} else {
-				this.props.handleNext();
-		}
 	}
 
 	handleClose = () => {
@@ -65,7 +63,40 @@ class Confirm extends React.Component {
 		this.setState({ openCancelDialog: false });
 	}
 
+        handleConfirmBtnClick = async (event) => {
+		event.preventDefault();
+
+		if (this.state.confirmStatus === false) {
+			this.setState({open:true});
+                        return;
+		}
+
+                this.setState({
+                        creating: true,
+                });
+
+                try {
+                        await createEvents(this.props.fieldValues)
+                        this.props.handleNext();
+                } catch (err) {
+                        // TODO(SuJiaKuan): 錯誤處理.
+                        console.error(err);
+
+                        this.setState({
+                                creating: false,
+                        });
+                }
+        }
+
 	render () {
+                const date = moment(this.props.fieldValues.items[0].date);
+                const { content } = this.props.fieldValues.items[0];
+                const dateStr = getDateStr(date);
+                const timeStr = getTimeStr(date);
+
+                const prevBtnDisalbed = this.state.creating;
+                const nextBtnDisalbed = this.state.creating;
+
 		return (
 			<div>
 			<div className="form-frame">
@@ -99,43 +130,40 @@ class Confirm extends React.Component {
 
 							<Hidden mdUp>
 								<Grid container direction="row" justify="space-between" className="mobile-date-time hidden-md">
-									<h2>日期</h2>
-									<h2>時間!</h2>
+									<h2>{dateStr}</h2>
+									<h2>{timeStr}</h2>
 								</Grid>
 							</Hidden>
 				            <Grid container direction='row' className="list-title">
 								<Grid item md={2} className="hidden-sm">
-								  <h2>日期</h2>
+								  <h2>{dateStr}</h2>
 								</Grid>
 								<Grid item md={2} className="hidden-sm">
-								  <h2>時間!</h2>
+								  <h2>{timeStr}</h2>
 								</Grid>
 								<Grid item xs={4} md={2}>
-								  <h2>便當</h2>
-								  <h2>小蛋糕</h2>
+                                                                  {map(content, ({ name }, idx) => <h2 key={idx}>{name}</h2>)}
 								</Grid>
 								<Grid item xs={4} md={2}>
-								  <h2>40</h2>
-								  <h2>30~40個</h2>
+                                                                  {map(content, ({ amount }, idx) => <h2 key={idx}>{amount}</h2>)}
 								</Grid>
 								<Grid item xs={4} md={2}>
-								  <h2>素食</h2>
-								  <h2>備註過長換行備註過長換行備註過長換行備註過長換行備註過長換行</h2>
-								</Grid>  	
+                                                                  {map(content, ({ description }, idx) => <h2 key={idx}>{description}</h2>)}
+								</Grid>
 				            </Grid>
 						</Grid>
 						<Grid item xs={12} md={4} className="right-part">
 							<div className="giver-info">
 								<h1>身份</h1>
 								<h2>
-									<span>{this.props.fieldValues.giver.type}: </span>
+									<span>{GIVER_TYPES[this.props.fieldValues.giver.type]}: </span>
 									{this.props.fieldValues.giver.name}
 								</h2>
 
 								<h1>聯絡人</h1>
 								<h2>
 									<span>{this.props.fieldValues.giver.contactName} </span>
-									<span> {this.props.fieldValues.giver.contactTitle}</span>
+									<span> {CONTACT_TITLES[this.props.fieldValues.giver.contactTitle]}</span>
 								</h2>
 
 								<h1>電子信箱</h1>
@@ -154,7 +182,7 @@ class Confirm extends React.Component {
 				</div>
 				{/* 按鈕 */}
 				<Grid container direction="row" justify="space-between">
-				  <Button variant="outlined" onClick={this.props.handleBack} className="formbutton-back">
+				  <Button variant="outlined" onClick={this.props.handleBack} className="formbutton-back" disabled={prevBtnDisalbed}>
 				    <i className="fas fa-arrow-left"></i> 
 				    上一步</Button>
 				  <Hidden smUp>
@@ -164,8 +192,14 @@ class Confirm extends React.Component {
 				    <Hidden xsDown>
 				    	<div className="cancle-log" onClick={this.handleCancelDialogOpen}>取消登記</div>
 				    </Hidden>
-				    <Button variant="contained" color="primary" onClick={this.nextStep} className={`formbutton-next ${this.props.classes.button}`}>
-				      下一步
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      onClick={this.handleConfirmBtnClick}
+                                      className={`formbutton-next ${this.props.classes.button}`}
+                                      disabled={nextBtnDisalbed}
+                                    >
+				      確認登記
 				      <i className="fas fa-arrow-right"></i></Button>
 				  </div>
 				</Grid>

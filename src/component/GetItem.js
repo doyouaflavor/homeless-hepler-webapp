@@ -3,11 +3,14 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import { withStyles } from '@material-ui/core/styles';
+
+import map from 'lodash/map';
+import some from 'lodash/some';
 
 import { Link as Rlink} from 'react-router-dom';
 
@@ -30,14 +33,14 @@ class GetItem extends React.Component {
     super();
     this.state = {
       openCancelDialog:false,
-      content: [{ name: '', amount: '', description: '' }]
+      content: [{ name: '', amount: '', description: '' }],
+      open: false,
     };
     this.nextStep = this.nextStep.bind(this);
   }
     
   handleAddContent = () => {
     this.setState({ content: this.state.content.concat([{ name: '', amount: '', description: '' }]) });
-    console.log(this.state.content);
   }
   
   handleRemoveContent = (idx) => () => {
@@ -52,15 +55,30 @@ class GetItem extends React.Component {
     this.setState({ content: newContent });
   }
 
-  nextStep(event) {
-  event.preventDefault();
-  const data = this.state.content;
-  this.props.saveContentValues(data);
-  this.props.handleNext();
-  }
+  handleClose = () => {
+    this.setState({
+      errors: [],
+      open: false,
+    });
+  };
 
-  handleCancelDialogOpen = (event) =>{
-    this.setState({ openCancelDialog: true });
+  nextStep(event) {
+    event.preventDefault();
+
+    const data = this.state.content;
+    const failed = some(data, ({ name, amount }) => (
+      name === '' || amount === ''
+    ));
+
+    if (failed) {
+      this.setState({
+        errors: ['尚未填寫物資項目或數量'],
+        open: true,
+      });
+    } else {
+      this.props.saveContentValues(data);
+      this.props.handleNext();
+    }
   }
 
   handleCancelDialogClose = (event) => {
@@ -184,6 +202,26 @@ class GetItem extends React.Component {
                 </Rlink>
               </DialogActions>
             </Dialog>
+          {/*輸入檢查訊息 */}
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {map(this.state.errors, (error) => (
+                  <p key={error}>{error}</p>
+                ))}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary" autoFocus>
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
     )
   }

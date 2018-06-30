@@ -45,8 +45,8 @@ class Home extends Component {
     });
 
     try {
-      const events = await getTaipeiStationEvents();
-      const registeredEvents = map(events, (event) => merge(event, {
+      const result = await getTaipeiStationEvents();
+      const registeredEvents = map(result.events, (event) => merge(event, {
         date: moment(event.date),
       }))
 
