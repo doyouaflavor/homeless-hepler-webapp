@@ -8,6 +8,7 @@ import { Link as Rlink} from 'react-router-dom';
 import moment from 'moment';
 import map from 'lodash/map';
 
+import { createEvents } from '../api/events'
 import { getDateStr, getTimeStr } from '../utils';
 import { GIVER_TYPES, CONTACT_TITLES } from '../const';
 
@@ -16,6 +17,7 @@ class Confirm extends React.Component {
 		super(props);
 		this.state = {
 		  confirmStatus: false,
+                  creating: false,
 		};
 
 		this.handleInputChange = this.handleInputChange.bind(this);
@@ -27,11 +29,33 @@ class Confirm extends React.Component {
 		});
 	}
 
+        handleConfirmBtnClick = async () => {
+                this.setState({
+                        creating: true,
+                });
+                console.log(this.props.fieldValues.giver.email)
+
+                try {
+                        await createEvents(this.props.fieldValues)
+                        this.props.handleNext();
+                } catch (err) {
+                        // TODO(SuJiaKuan): 錯誤處理.
+                        console.error(err);
+
+                        this.setState({
+                                creating: false,
+                        });
+                }
+        }
+
 	render () {
                 const date = moment(this.props.fieldValues.items[0].date);
                 const { content } = this.props.fieldValues.items[0];
                 const dateStr = getDateStr(date);
                 const timeStr = getTimeStr(date);
+
+                const prevBtnDisalbed = this.state.creating;
+                const nextBtnDisalbed = this.state.creating;
 
 		return (
 			<div>
@@ -118,7 +142,7 @@ class Confirm extends React.Component {
 				</div>
 				{/* 按鈕 */}
 				<Grid container direction="row" justify="space-between">
-				  <Button variant="outlined" onClick={this.props.handleBack} className="formbutton-back">
+				  <Button variant="outlined" onClick={this.props.handleBack} className="formbutton-back" disabled={prevBtnDisalbed}>
 				    <i className="fas fa-arrow-left"></i> 
 				    上一步</Button>
 				  <Hidden smUp>
@@ -132,7 +156,7 @@ class Confirm extends React.Component {
 				        <div className="cancle-log">取消登記</div>
 				      </Rlink>
 				    </Hidden>
-				    <Button variant="contained" color="primary" onClick={this.nextStep} className="formbutton-next">
+				    <Button variant="contained" color="primary" onClick={this.handleConfirmBtnClick} className="formbutton-next" disabled={nextBtnDisalbed}>
 				      確認登記
 				      <i className="fas fa-arrow-right"></i></Button>
 				  </div>
