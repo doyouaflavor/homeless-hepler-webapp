@@ -156,8 +156,11 @@ $dates-selector-select-border: 2px solid #D3D3D3;
       text-align: center;
       color: inherit;
 
-      .MuiInput-input-205 {
-        border-bottom: $dates-selector-select-border !important;
+      &:before {
+        border-bottom: 2px solid #D3D3D3;
+      }
+      &:after {
+        border-bottom: 2px solid $main-color;
       }
     }
 
