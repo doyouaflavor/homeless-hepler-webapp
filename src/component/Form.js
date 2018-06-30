@@ -37,11 +37,11 @@ let fieldValues ={
 };
 
 // Over write material-ui
-const styles = theme => ({
-  stepstyle:{
+const styles = {
+  stepStyle:{
     fontSize:'20px',
-  },
-});
+  }
+};
 // step title
 function getSteps() {
   return ['地點與日期', '物資', '捐贈者資料' , '確認資料'];
@@ -144,7 +144,7 @@ class Form extends React.Component {
 
         <div className="form-inside">
   {/* 進度條 */}
-          <Stepper activeStep={activeStep} className="stepp-style">
+          <Stepper activeStep={activeStep} className={this.props.classes.stepStyle}>
             {steps.map((label, index) => {
               const props = {};
               const labelProps = {};
