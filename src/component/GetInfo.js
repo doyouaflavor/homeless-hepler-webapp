@@ -8,6 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+import validator from 'validator';
 import map from 'lodash/map';
 
 import { GIVER_TYPES, CONTACT_TITLES } from '../const';
@@ -46,6 +47,9 @@ class GetInfo extends React.Component {
 		}
 		if (this.state.email === '') {
 			errors.push("尚未填寫電子信箱");
+		}
+		if (!validator.isEmail(this.state.email)) {
+			errors.push("電子信箱格式錯誤");
 		}
 		if (this.state.phone === '') {
 			errors.push("尚未填寫聯絡電話");
