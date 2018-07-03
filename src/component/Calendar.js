@@ -174,33 +174,36 @@ class Calendar extends React.Component {
         {time}
       </MenuItem>
     ))
-    const eventItems = map(matchedEvents, ({ _id, date, content }) => {
-      const time = (
-        <div className='Dates-Selector-Event-Time'>
-          {getTimeStr(date)}
-        </div>
-      );
-      const itemList = map(content, (item, idx) => (
-        <div
-          key={idx}
-          className='Dates-Selector-Event-Item'
-        >
-          {getItemStr(item)}
-        </div>
-      ));
-
-      return (
-        <div
-          key={_id}
-          className='Dates-Selector-Event'
-        >
-          {time}
-          <div className='Dates-Selector-Event-Items'>
-            {itemList}
+    const eventItems =
+      matchedEvents.length === 0 ?
+      <div>尚未有人登記</div> :
+      map(matchedEvents, ({ _id, date, content }) => {
+        const time = (
+          <div className='Dates-Selector-Event-Time'>
+            {getTimeStr(date)}
           </div>
-        </div>
-      )
-    })
+        );
+        const itemList = map(content, (item, idx) => (
+          <div
+            key={idx}
+            className='Dates-Selector-Event-Item'
+          >
+            {getItemStr(item)}
+          </div>
+        ));
+
+        return (
+          <div
+            key={_id}
+            className='Dates-Selector-Event'
+          >
+            {time}
+            <div className='Dates-Selector-Event-Items'>
+              {itemList}
+            </div>
+          </div>
+        )
+      })
 
     return (
       <div className='Dates-Selector'>
@@ -215,7 +218,7 @@ class Calendar extends React.Component {
         </div>
         <div className='Dates-Selector-Content'>
           <div className='Dates-Selector-Content-Part'>
-            <div>您預計發放的時間</div>
+            <div className='Dates-Selector-Content-Header'>您預計發放的時間：</div>
             <Select
               className='Dates-Selector-Select Dates-Selector-Time'
               value={selectedTime}
@@ -226,7 +229,7 @@ class Calendar extends React.Component {
             </Select>
           </div>
           <div className='Dates-Selector-Content-Part'>
-            <div>當天已有的登記</div>
+            <div className='Dates-Selector-Content-Header'>當天已有的登記：</div>
             {eventItems}
           </div>
         </div>
