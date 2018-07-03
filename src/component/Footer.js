@@ -2,7 +2,7 @@ import React from 'react';
 import '../App.css';
 import Grid from '@material-ui/core/Grid';
 import WhiteLogo from '../dist/images/life_whitelogo.png';
-import G0v from '../dist/images/g0v.png';
+import G0v from '../dist/images/poweredby-square-i.png';
 
 class Footer extends React.Component {
 
@@ -27,10 +27,9 @@ class Footer extends React.Component {
 							</div>
 						</Grid>
 						<Grid item xs={12} md={6} className="right">
-							<Grid container direction='row' alignItems='center' justify='center' className="logo-block">
-								<h1>POWERED BY</h1>
-								<img src={G0v} alt="g0v logo"/>				
-							</Grid>
+							<a href="https://grants.g0v.tw/power/" target="_blank">
+								<img src={G0v} alt="g0v logo"/>
+							</a>				
 							<h2>Copyright © 2018 DoYouAFlavor All Rights Reserved.</h2>
 						</Grid>
 					</Grid>					
