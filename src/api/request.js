@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_ROOT = 'http://159.65.136.118:5000/api/v1';
+const API_ROOT = 'https://homeless-helper-api.doyouaflavor.tw/api/v1';
 
 async function get(url) {
   return await axios.get(`${API_ROOT}${url}`)
