@@ -13,17 +13,7 @@ class App extends Component {
         <Route exact path="/" component={Home} />
         <Route path="/form" component={Form} />
         <Route path="/admin" component={Admin} />
-        <Route
-          render={({ location }) => {
-            if (location.pathname.startsWith('/admin')) {
-              return null
-            }
-
-            return (
-              <Footer/>
-            )
-          }}
-        />
+        <Footer/>
       </div>
     );
   }

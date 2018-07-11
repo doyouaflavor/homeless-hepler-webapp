@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import '../App.css';
+import { Link as Rlink} from 'react-router-dom';
+import WhiteLogo from '../dist/images/life_whitelogo.png';
 
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import LeftArrowIcon from '@material-ui/icons/KeyboardArrowLeft';
 import RightArrowIcon from '@material-ui/icons/KeyboardArrowRight';
 import IconButton from '@material-ui/core/IconButton';
-import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import moment from 'moment';
 import filter from 'lodash/filter';
@@ -26,13 +31,6 @@ const NAVIGATE_ACTION = {
   PREV: 'PREV',
   NEXT: 'NEXT',
 };
-
-const styles = () => ({
-  tableWrapper: {
-    width: '100%',
-    overflowX: 'auto',
-  },
-});
 
 class Period {
   constructor(year, month) {
@@ -130,7 +128,7 @@ class Admin extends Component {
 
   renderControl(shownPeriod, oldestPeriod, newestPeriod) {
     return (
-      <div>
+      <div className='events-control'>
         <IconButton
           disabled={shownPeriod.isEqual(oldestPeriod)}
           onClick={() => this.navigate(NAVIGATE_ACTION.PREV)}
@@ -149,10 +147,8 @@ class Admin extends Component {
   }
 
   renderEvents(events) {
-    const { classes } = this.props;
-
     return (
-      <Paper className={classes.tableWrapper}>
+      <Paper className='events-table-wrapper'>
         <Table>
           <TableHead>
             <TableRow>
@@ -214,18 +210,28 @@ class Admin extends Component {
     ));
 
     return (
-      <div>
-        {
-          !fetched ? '資料讀取中' :
-          registeredEvents.length === 0 ? '尚無任何登記' :
-          <div>
-            {this.renderControl(shownPeriod, oldestPeriod, newestPeriod)}
-            {this.renderEvents(events)}
-          </div>
-        }
+      <div className='admin-page'>
+        <AppBar position="static" className="navbar">
+          <Toolbar>
+            <img src={WhiteLogo} alt="人生百味white-logo" className="life-logo"/>
+            <Rlink to="/">
+              <Typography variant="title" color="inherit" className="flex">無家者小幫手</Typography>
+            </Rlink>
+          </Toolbar>
+        </AppBar>
+        <div className='events-container'>
+          {
+            !fetched ? <CircularProgress className='events-loading' /> :
+            registeredEvents.length === 0 ? <div className='events-empty'>尚無任何登記</div> :
+            <div className='events-wrapper'>
+              {this.renderControl(shownPeriod, oldestPeriod, newestPeriod)}
+              {this.renderEvents(events)}
+            </div>
+          }
+        </div>
       </div>
     )
   }
 }
 
-export default withStyles(styles)(Admin);
+export default Admin;
