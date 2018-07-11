@@ -1,0 +1,56 @@
+.admin-page {
+  background-color: #f7f7f7;
+  min-height: calc(100vh - 291px);
+
+  .events-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .events-loading {
+      margin-top: 100px;
+      color: $main-color;
+    }
+
+    .events-empty {
+      font-size: 18px;
+    }
+
+    .events-wrapper {
+      width: 100%;
+
+      .events-control {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .events-table-wrapper {
+        width: 100%;
+        overflow: auto;
+
+        table {
+          min-width: 950px;
+
+          > thead > tr > th {
+            background-color: $main-color;
+            color: white;
+            padding: 6px;
+          }
+
+          tbody > tr {
+            &:nth-child(odd) {
+              background-color: rgba(234, 234, 234, 0.4);
+            }
+
+            > td {
+              padding: 6px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
