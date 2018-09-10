@@ -15,6 +15,7 @@ import moment from 'moment';
 import map from 'lodash/map';
 
 import { createEvents } from '../api/events'
+import ga from '../googleAnalytics';
 import { getDateStr, getTimeStr } from '../utils';
 import { GIVER_TYPES, CONTACT_TITLES } from '../const';
 
@@ -76,6 +77,7 @@ class Confirm extends React.Component {
                 });
 
                 try {
+                        ga.sendEvent('Form', 'Click Confirm Button', 'Button')
                         await createEvents(this.props.fieldValues)
                         this.props.handleNext();
                 } catch (err) {
