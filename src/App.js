@@ -15,7 +15,7 @@ const logPageView = () => {
 
 class App extends Component {
 
-  componentDidMount() {
+  componentWillMount() {
     ga.initialize()
   }
 
