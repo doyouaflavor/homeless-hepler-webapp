@@ -13,9 +13,15 @@ class Footer extends React.Component {
 						<Grid item xs={12} md={6}>
 							<div className="block">		
 								<img src={WhiteLogo} alt="人生百味white-logo" className="life-logo"/>
-								<i className="fab fa-facebook"></i>
-								<i className="fab fa-blogger"></i>
-								<i className="fab fa-instagram"></i>
+								<a href="https://www.facebook.com/Do.you.a.flavor/" target="_blank">
+									<i className="fab fa-facebook"></i>
+                                </a>
+                                <a href="https://medium.com/%E4%BA%BA%E7%94%9F%E7%99%BE%E5%91%B3" target="_blank">
+								    <i className="fab fa-medium"></i>
+                                </a>
+                                <a href="https://www.instagram.com/doyouaflavor/" target="_blank">
+								    <i className="fab fa-instagram"></i>
+                                </a>
 							</div>
 							<div className="block">
 								<h2>10848 台北市萬華區貴陽街 2 段 202 號 2 樓</h2>
