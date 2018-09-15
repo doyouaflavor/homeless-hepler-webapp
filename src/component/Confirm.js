@@ -7,6 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { withStyles } from '@material-ui/core/styles';
 
 import { Link as Rlink} from 'react-router-dom';
@@ -17,6 +18,7 @@ import map from 'lodash/map';
 import { createEvents } from '../api/events'
 import { getDateStr, getTimeStr } from '../utils';
 import { GIVER_TYPES, CONTACT_TITLES } from '../const';
+import PlatformAgreementContent from './PlatformAgreementContent';
 
 const styles = {
   confirmButton: {
@@ -40,6 +42,7 @@ class Confirm extends React.Component {
       confirmStatus: false,
       open: false,
       creating: false,
+      openAgreementDialog: false,
     };
     this.handleCheck = this.handleCheck.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -86,6 +89,18 @@ class Confirm extends React.Component {
         creating: false,
       });
     }
+  };
+
+  closeAgreementDialog = () => {
+    this.setState({
+      openAgreementDialog: false,
+    });
+  };
+
+  openAgreementDialog = () => {
+    this.setState({
+      openAgreementDialog: true,
+    });
   };
 
   render() {
@@ -176,7 +191,19 @@ class Confirm extends React.Component {
             </Grid>
             <div className='confirm-term'>
               <input type="checkbox" onClick={this.handleCheck}/>
-              <h1>同意條款</h1>
+              <h1>
+                本人已詳細閱讀
+                <span
+                  onClick={this.openAgreementDialog}
+                  style={{
+                    cursor :'pointer',
+                    textDecoration:'underline',
+                    margin:'0 8px',
+                  }}
+                >
+                  同意條款
+                </span>
+              </h1>
             </div>
           </div>
         </div>
@@ -243,6 +270,32 @@ class Confirm extends React.Component {
                 取消登記
               </Button>
             </Rlink>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.openAgreementDialog}
+          onClose={this.closeAgreementDialog}
+          scroll="paper"
+          disableBackdropClick={true}
+          aria-labelledby="scrollable-agreement-dialog"
+        >
+          <DialogTitle align="center">同意條款</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <PlatformAgreementContent />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="text"
+              style={{
+                color: '#F7B815',
+              }}
+              size="large"
+              onClick={this.closeAgreementDialog}
+            >
+              我知道了
+            </Button>
           </DialogActions>
         </Dialog>
       </div>
