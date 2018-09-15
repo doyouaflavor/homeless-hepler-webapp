@@ -170,7 +170,12 @@ class Home extends Component {
                   </Rlink>
                 <Typography className="intro-content-right">想要參與</Typography>
                 <Typography className="intro-content-right">但不知道從何開始嗎?</Typography>
+                <a
+                  href="https://github.com/doyouaflavor/homeless-helper-report/blob/master/%E4%BA%BA%E7%94%9F%E7%99%BE%E5%91%B3-%E8%A1%97%E9%A0%AD%E9%A3%9F%E7%89%A9%E5%88%86%E4%BA%AB%E5%B0%8F%E6%8C%87%E5%8D%97.pdf"
+                  target="_blank"
+                >
                 <Typography className="c-link-big" variant="display1">看看參與指南</Typography>
+                </a>
               </Grid>              
             </Grid>
           </Grid>
