@@ -16,6 +16,7 @@ import moment from 'moment';
 import map from 'lodash/map';
 
 import { createEvents } from '../api/events'
+import ga from '../googleAnalytics';
 import { getDateStr, getTimeStr } from '../utils';
 import { GIVER_TYPES, CONTACT_TITLES } from '../const';
 import PlatformAgreementContent from './PlatformAgreementContent';
