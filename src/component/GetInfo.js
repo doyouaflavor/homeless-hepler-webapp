@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -31,20 +32,29 @@ const styles = {
   }
 };
 
+const getDefaultState = () => {
+  return {
+    openCancelDialog: false,
+    type: 'person',
+    name: '',
+    contactName: '',
+    contactTitle: 'Mr.',
+    email: '',
+    phone: '',
+    open: false,
+    errors: [],
+  };
+};
+
+const isPropsGiverUsable = (propGiver) => {
+  return propGiver && Object.keys(propGiver).length > 0;
+};
+
 class GetInfo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      openCancelDialog: false,
-      giverType: 'person',
-      name: '',
-      contactName: '',
-      contactTitle: 'Mr.',
-      email: '',
-      phone: '',
-      open: false,
-      errors: [],
-    };
+    const { giver } = this.props.fieldValues;
+    this.state = isPropsGiverUsable(giver) ? {...getDefaultState(), ...giver} : getDefaultState();
     this.nextStep = this.nextStep.bind(this);
     this.changeType = this.changeType.bind(this);
     this.validate = this.validate.bind(this);
@@ -55,10 +65,10 @@ class GetInfo extends React.Component {
 
   validate() {
     const errors = [];
-    if (this.state.giverType === 'organization' && this.state.name === '') {
+    if (this.state.type === 'organization' && this.state.name === '') {
       errors.push("尚未填寫團體名稱");
     }
-    if (this.state.giverType === 'store' && this.state.name === '') {
+    if (this.state.type === 'store' && this.state.name === '') {
       errors.push("尚未填寫商家名稱");
     }
     if (this.state.contactName === '') {
@@ -85,7 +95,7 @@ class GetInfo extends React.Component {
       return;
     } else {
       const {
-        giverType,
+        type,
         name,
         contactName,
         contactTitle,
@@ -93,8 +103,8 @@ class GetInfo extends React.Component {
         phone,
       } = this.state;
       const giver = {
-        type: giverType,
-        name: giverType === 'person' ? contactName : name,
+        type: type,
+        name: type === 'person' ? contactName : name,
         contactName,
         contactTitle,
         email,
@@ -112,7 +122,7 @@ class GetInfo extends React.Component {
     const {value} = event.target;
 
     this.setState({
-      giverType: event.target.value,
+      type: event.target.value,
       name: value === 'person' ? '' : this.state.name,
     });
   }
@@ -171,7 +181,7 @@ class GetInfo extends React.Component {
                 <select
                   type="text"
                   ref="type"
-                  value={this.state.giverType}
+                  value={this.state.type}
                   onChange={this.changeType}
                 >
                   {map(GIVER_TYPES, (shownValue, value) => (
@@ -185,14 +195,14 @@ class GetInfo extends React.Component {
                 </select>
                 <i className="fas fa-sort-down"></i>
               </div>
-              {this.state.giverType === 'person' ?
+              {this.state.type === 'person' ?
                 <input ref="name" className="none"/> :
                 <div className="info">
-                  <h2>{this.state.giverType === 'organization' ? '團體名稱' : '商家名稱'}</h2>
+                  <h2>{this.state.type === 'organization' ? '團體名稱' : '商家名稱'}</h2>
                   <input
                     type="text"
                     ref="name"
-                    placeholder={this.state.giverType === 'organization' ? '團體名稱' : '商家名稱'}
+                    placeholder={this.state.type === 'organization' ? '團體名稱' : '商家名稱'}
                     value={this.state.name}
                     onChange={this.handleNameChange}
                   />
@@ -316,5 +326,19 @@ class GetInfo extends React.Component {
     );
   }
 }
+
+GetInfo.propTypes = {
+  fieldValues: PropTypes.shape({
+    locationId: PropTypes.string,
+    giver: PropTypes.object,
+    items: PropTypes.shape({
+      date: PropTypes.string,
+      content: PropTypes.array,
+    }),
+  }).isRequired,
+  handleBack: PropTypes.func.isRequired,
+  handleNext: PropTypes.func.isRequired,
+  saveGiverValues: PropTypes.func.isRequired,
+};
 
 export default withStyles(styles)(GetInfo);
