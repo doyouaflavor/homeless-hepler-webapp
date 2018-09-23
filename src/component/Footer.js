@@ -38,8 +38,15 @@ class Footer extends React.Component {
               </h2>
             </div>
             <div className="block">
-              <h2>媒體聯絡人：盈婕 (02) 2371-2771</h2>
               <h3><a href="mailto:welcome@doyouaflavor.tw">welcome@doyouaflavor.tw</a></h3>
+              <h2>媒體聯絡人：盈婕
+                <a
+                  href="tel:+886223712771"
+                  style={{textDecoration:'underline', marginLeft:'8px'}}
+                >
+                  (02) 2371-2771
+                </a>
+              </h2>
             </div>
           </Grid>
           <Grid item xs={12} md={6} className="right">
