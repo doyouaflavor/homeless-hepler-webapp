@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
@@ -28,19 +29,24 @@ const styles = {
   }
 };
 
+const getDefaultContentArray = () => (
+  [{ name: '', amount: '', description: '' }]
+);
+
 class GetItem extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const contentProp = this.props.fieldValues.items[0].content;
     this.state = {
       openCancelDialog:false,
-      content: [{ name: '', amount: '', description: '' }],
+      content: contentProp.length ? contentProp : getDefaultContentArray(),
       open: false,
     };
     this.nextStep = this.nextStep.bind(this);
   }
     
   handleAddContent = () => {
-    this.setState({ content: this.state.content.concat([{ name: '', amount: '', description: '' }]) });
+    this.setState({ content: this.state.content.concat(getDefaultContentArray()) });
   }
   
   handleRemoveContent = (idx) => () => {
@@ -226,5 +232,16 @@ class GetItem extends React.Component {
     )
   }
 }
+
+GetItem.propTypes = {
+  fieldValues: PropTypes.shape({
+    locationId: PropTypes.string,
+    giver: PropTypes.object,
+    items: PropTypes.shape({
+      date: PropTypes.string,
+      content: PropTypes.array,
+    }),
+  }).isRequired,
+};
 
 export default withStyles(styles)(GetItem);

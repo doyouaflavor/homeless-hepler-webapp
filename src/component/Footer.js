@@ -24,12 +24,29 @@ class Footer extends React.Component {
               </a>
             </div>
             <div className="block">
-              <h2>10848 台北市萬華區貴陽街 2 段 202 號 2 樓</h2>
-              <h2>2F, No. 202, Sec. 2, Guiyang St., Wanhua Dist., Taipei City 108, Taiwan </h2>
+              <h2>
+                10848 台北市萬華區貴陽街 2 段 202 號 2 樓
+                <a href="https://maps.google.com/?q=台北市萬華區貴陽街二段202號2樓" target="_blank">
+                  <i className="fas fa-map-marker-alt" style={{fontSize: '1.5em'}}></i>
+                </a>
+              </h2>
+              <h2>
+                2F, No. 202, Sec. 2, Guiyang St., Wanhua Dist., Taipei City 108, Taiwan
+                <a href="https://maps.google.com/?q=No. 202, Sec. 2, Guiyang St., Wanhua Dist., Taipei City" target="_blank">
+                  <i className="fas fa-map-marker-alt" style={{fontSize: '1.5em'}}></i>
+                </a>
+              </h2>
             </div>
             <div className="block">
-              <h3>welcome@doyouaflavor.tw</h3>
-              <h2>媒體聯絡人：盈婕 (02) 2371-2771</h2>
+              <h3><a href="mailto:welcome@doyouaflavor.tw">welcome@doyouaflavor.tw</a></h3>
+              <h2>媒體聯絡人：盈婕
+                <a
+                  href="tel:+886223712771"
+                  style={{textDecoration:'underline', marginLeft:'8px'}}
+                >
+                  (02) 2371-2771
+                </a>
+              </h2>
             </div>
           </Grid>
           <Grid item xs={12} md={6} className="right">
