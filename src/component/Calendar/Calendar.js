@@ -1,95 +1,27 @@
 import React from 'react';
 import BigCalendar from 'react-big-calendar';
-import BigToolbar from 'react-big-calendar/lib/Toolbar'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import LeftArrowIcon from '@material-ui/icons/KeyboardArrowLeft';
-import RightArrowIcon from '@material-ui/icons/KeyboardArrowRight';
 import DownArrowIcon from '@material-ui/icons/KeyboardArrowDown';
-import AddIcon from '@material-ui/icons/AddCircle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import classnames from 'classnames'
+import classnames from 'classnames';
 import moment from 'moment';
 import filter from 'lodash/filter';
 import map from 'lodash/map';
-import padStart from 'lodash/padStart';
 import parseInt from 'lodash/parseInt';
-import range from 'lodash/range';
 import split from 'lodash/split';
 
-import { matchEvent, getTimeStr } from '../utils';
-import { ZH_WEEKDAY } from '../const';
+import DateCellWrapper from './DateCellWrapper';
+import Toolbar from './Toolbar';
+import { matchEvent, getTimeStr } from '../../utils';
+import { ZH_WEEKDAY } from '../../const';
+import { getItemStr, GIVE_TIME } from './helper';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 BigCalendar.momentLocalizer(moment);
 
-const GIVE_TIME = map(range(48), (idx) => {
-  const hour = parseInt(idx / 2, 10);
-  const minute = idx % 2 === 0 ? 0 : 30;
-
-  return `${padStart(hour, 2, '0')}:${padStart(minute, 2, '0')}`;
-});
-
-const getItemStr = (item) => `${item.name} ${item.amount}`;
-
-class Toolbar extends BigToolbar {
-  render() {
-    return (
-      <div className='rbc-toolbar'>
-        <LeftArrowIcon className='toolbar-arrow' onClick={() => this.navigate('PREV')} />
-        <span className="rbc-toolbar-label">{this.props.label}</span>
-        <RightArrowIcon className='toolbar-arrow' onClick={() => this.navigate('NEXT')} />
-      </div>
-    );
-  }
-}
-
-class DateCellWrapper extends React.Component {
-  render() {
-    const { registeredEvents, canAdd, value } = this.props;
-    const shownDate = moment(value);
-
-    const matchedEvents = registeredEvents.filter(e => matchEvent(e.date, shownDate));
-
-    const className = classnames('rbc-day-bg', {
-      'day-event': matchedEvents[0],
-      'read-only': !canAdd,
-    });
-
-    const renderedItems = matchedEvents.length ? (
-      matchedEvents.map(e => (
-         <div className='day-event-title'>{getTimeStr(e.date)} {getItemStr(e.content[0])}</div>
-        )).slice(0,2)
-      ):
-      null;
-
-    return (
-      <div className={className}>
-        {
-          canAdd &&
-          <AddIcon
-            className='add-event-btn'
-            onClick={() => this.props.updateShownDate(shownDate)}
-          />
-        }
-        {
-          matchedEvents.length < 3 ?
-            null :
-            <div
-              role="button"
-              className="more-btn"
-              onClick={() => {}}
-            >
-              +還有 {matchedEvents.length - 2} 個
-            </div>
-        }
-        { renderedItems }
-      </div>
-    );
-  }
-}
 
 class Calendar extends React.Component {
 
