@@ -103,6 +103,7 @@ $dates-selector-select-border: 2px solid #D3D3D3;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            cursor: pointer;
 
             &.read-only {
               flex-direction: column-reverse;

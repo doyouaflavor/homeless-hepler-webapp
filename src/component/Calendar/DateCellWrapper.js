@@ -7,7 +7,7 @@ import { getTimeStr, matchEvent } from "../../utils";
 import { getItemStr } from './helper';
 import AddIcon from "../../../node_modules/@material-ui/icons/AddCircle";
 
-class DateCellWrapper extends React.PureComponent {
+class DateCellWrapper extends React.Component {
   render() {
     const { registeredEvents, canAdd, value } = this.props;
     const shownDate = moment(value);
@@ -29,7 +29,7 @@ class DateCellWrapper extends React.PureComponent {
       null;
 
     return (
-      <div className={className}>
+      <div className={className} onClick={ () => { this.props.onDayClick(matchedEvents); }}>
         {
           canAdd &&
           <AddIcon
@@ -43,9 +43,8 @@ class DateCellWrapper extends React.PureComponent {
             <div
               role="button"
               className="more-btn"
-              onClick={() => {}}
             >
-              +還有 {matchedEvents.length - 2} 個
+              ...還有 {matchedEvents.length - 2} 個
             </div>
         }
         { renderedItems }
@@ -53,6 +52,7 @@ class DateCellWrapper extends React.PureComponent {
     );
   }
 }
+
 DateCellWrapper.defaultProps = {
   canAdd: false,
 };
@@ -62,6 +62,7 @@ DateCellWrapper.propTypes = {
   registeredEvents: PropTypes.array.isRequired,
   canAdd: PropTypes.bool,
   value: PropTypes.instanceOf(Date),
+  onDayClick: PropTypes.func,
 };
 
 export default DateCellWrapper;

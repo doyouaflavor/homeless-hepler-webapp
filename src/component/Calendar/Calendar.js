@@ -17,6 +17,7 @@ import Toolbar from './Toolbar';
 import { matchEvent, getTimeStr } from '../../utils';
 import { ZH_WEEKDAY } from '../../const';
 import { getItemStr, GIVE_TIME } from './helper';
+import DayDetailDialog from './DayDetailDialog';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -28,7 +29,9 @@ class Calendar extends React.Component {
   state = {
     shownDate: null,
     selectedTime: GIVE_TIME[0],
-  }
+    hideDayDetailDialog: true,
+    dialogEvents: [],
+  };
 
   updateState = (shownDate, selectedTime) => {
     this.setState({
@@ -63,6 +66,23 @@ class Calendar extends React.Component {
     this.updateState(this.state.shownDate, e.target.value);
   }
 
+  handleDayClick = (eventsArr) => {
+    if(eventsArr && eventsArr.length) {
+      this.setState({
+        hideDayDetailDialog: false,
+        dialogEvents: eventsArr,
+      })
+    }
+  };
+
+  handleDayDialogClose = () => {
+    if (!this.state.hideDayDetailDialog){
+      this.setState({
+        hideDayDetailDialog: true,
+      });
+    }
+  };
+
   renderBigCalendar() {
     const className = classnames({
       transparent: !this.props.fetched,
@@ -78,6 +98,7 @@ class Calendar extends React.Component {
           registeredEvents={this.props.registeredEvents}
           canAdd={this.props.canAdd}
           updateShownDate={this.updateShownDate}
+          onDayClick={this.handleDayClick}
           {...props}
         />
       ),
@@ -85,14 +106,21 @@ class Calendar extends React.Component {
     };
 
     return (
-      <BigCalendar
-        className={className}
-        components={components}
-        events={[]}
-        views={['month']}
-        formats={formats}
-        defaultDate={new Date()}
-      />
+      <React.Fragment>
+        <BigCalendar
+          className={className}
+          components={components}
+          events={[]}
+          views={['month']}
+          formats={formats}
+          defaultDate={new Date()}
+        />
+        <DayDetailDialog
+          hidden={this.state.hideDayDetailDialog}
+          events={this.state.dialogEvents}
+          onClose={this.handleDayDialogClose}
+        />
+      </React.Fragment>
     )
   }
 
