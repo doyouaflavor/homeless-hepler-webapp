@@ -11,7 +11,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import classnames from 'classnames'
 import moment from 'moment';
-import find from 'lodash/find';
 import filter from 'lodash/filter';
 import map from 'lodash/map';
 import padStart from 'lodash/padStart';
@@ -51,20 +50,20 @@ class DateCellWrapper extends React.Component {
   render() {
     const { registeredEvents, canAdd, value } = this.props;
     const shownDate = moment(value);
-    const matchedEvent = find(registeredEvents, ({ date }) => (
-      matchEvent(date, shownDate)
-    ))
+
+    const matchedEvents = registeredEvents.filter(e => matchEvent(e.date, shownDate));
+
     const className = classnames('rbc-day-bg', {
-      'day-event': matchedEvent,
+      'day-event': matchedEvents[0],
       'read-only': !canAdd,
     });
-    let title;
 
-    if (matchedEvent && matchedEvent.content.length > 0) {
-      const { date, content } = matchedEvent;
-
-      title = `${getTimeStr(date)} ${getItemStr(content[0])}`;
-    }
+    const renderedItems = matchedEvents.length ? (
+      matchedEvents.map(e => (
+         <div className='day-event-title'>{getTimeStr(e.date)} {getItemStr(e.content[0])}</div>
+        )).slice(0,2)
+      ):
+      null;
 
     return (
       <div className={className}>
@@ -76,9 +75,17 @@ class DateCellWrapper extends React.Component {
           />
         }
         {
-          matchedEvent &&
-          <div className='day-event-title'>{title}</div>
+          matchedEvents.length < 3 ?
+            null :
+            <div
+              role="button"
+              className="more-btn"
+              onClick={() => {}}
+            >
+              +還有 {matchedEvents.length - 2} 個
+            </div>
         }
+        { renderedItems }
       </div>
     );
   }

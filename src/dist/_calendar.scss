@@ -102,7 +102,6 @@ $dates-selector-select-border: 2px solid #D3D3D3;
             background-clip: padding-box;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             overflow: hidden;
 
             &.read-only {
@@ -135,6 +134,13 @@ $dates-selector-select-border: 2px solid #D3D3D3;
               text-overflow: ellipsis;
               white-space: nowrap;
               overflow: hidden;
+            }
+            .more-btn {
+              font-size: 10px;
+              text-decoration: underline;
+              text-align: left;
+              color: blue;
+              cursor: pointer;
             }
           }
         }
