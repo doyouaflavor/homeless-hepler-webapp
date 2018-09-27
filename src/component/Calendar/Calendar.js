@@ -1,95 +1,37 @@
 import React from 'react';
 import BigCalendar from 'react-big-calendar';
-import BigToolbar from 'react-big-calendar/lib/Toolbar'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import LeftArrowIcon from '@material-ui/icons/KeyboardArrowLeft';
-import RightArrowIcon from '@material-ui/icons/KeyboardArrowRight';
 import DownArrowIcon from '@material-ui/icons/KeyboardArrowDown';
-import AddIcon from '@material-ui/icons/AddCircle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import classnames from 'classnames'
+import classnames from 'classnames';
 import moment from 'moment';
-import find from 'lodash/find';
 import filter from 'lodash/filter';
 import map from 'lodash/map';
-import padStart from 'lodash/padStart';
 import parseInt from 'lodash/parseInt';
-import range from 'lodash/range';
 import split from 'lodash/split';
 
-import { matchEvent, getTimeStr } from '../utils';
-import { ZH_WEEKDAY } from '../const';
+import DateCellWrapper from './DateCellWrapper';
+import Toolbar from './Toolbar';
+import { matchEvent, getTimeStr } from '../../utils';
+import { ZH_WEEKDAY } from '../../const';
+import { getItemStr, GIVE_TIME } from './helper';
+import DayDetailDialog from './DayDetailDialog';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 BigCalendar.momentLocalizer(moment);
 
-const GIVE_TIME = map(range(48), (idx) => {
-  const hour = parseInt(idx / 2, 10);
-  const minute = idx % 2 === 0 ? 0 : 30;
-
-  return `${padStart(hour, 2, '0')}:${padStart(minute, 2, '0')}`;
-});
-
-const getItemStr = (item) => `${item.name} ${item.amount}`;
-
-class Toolbar extends BigToolbar {
-  render() {
-    return (
-      <div className='rbc-toolbar'>
-        <LeftArrowIcon className='toolbar-arrow' onClick={() => this.navigate('PREV')} />
-        <span className="rbc-toolbar-label">{this.props.label}</span>
-        <RightArrowIcon className='toolbar-arrow' onClick={() => this.navigate('NEXT')} />
-      </div>
-    );
-  }
-}
-
-class DateCellWrapper extends React.Component {
-  render() {
-    const { registeredEvents, canAdd, value } = this.props;
-    const shownDate = moment(value);
-    const matchedEvent = find(registeredEvents, ({ date }) => (
-      matchEvent(date, shownDate)
-    ))
-    const className = classnames('rbc-day-bg', {
-      'day-event': matchedEvent,
-      'read-only': !canAdd,
-    });
-    let title;
-
-    if (matchedEvent && matchedEvent.content.length > 0) {
-      const { date, content } = matchedEvent;
-
-      title = `${getTimeStr(date)} ${getItemStr(content[0])}`;
-    }
-
-    return (
-      <div className={className}>
-        {
-          canAdd &&
-          <AddIcon
-            className='add-event-btn'
-            onClick={() => this.props.updateShownDate(shownDate)}
-          />
-        }
-        {
-          matchedEvent &&
-          <div className='day-event-title'>{title}</div>
-        }
-      </div>
-    );
-  }
-}
 
 class Calendar extends React.Component {
 
   state = {
     shownDate: null,
     selectedTime: GIVE_TIME[0],
-  }
+    hideDayDetailDialog: true,
+    dialogEvents: [],
+  };
 
   updateState = (shownDate, selectedTime) => {
     this.setState({
@@ -124,6 +66,23 @@ class Calendar extends React.Component {
     this.updateState(this.state.shownDate, e.target.value);
   }
 
+  handleDayClick = (eventsArr) => {
+    if(eventsArr && eventsArr.length) {
+      this.setState({
+        hideDayDetailDialog: false,
+        dialogEvents: eventsArr,
+      })
+    }
+  };
+
+  handleDayDialogClose = () => {
+    if (!this.state.hideDayDetailDialog){
+      this.setState({
+        hideDayDetailDialog: true,
+      });
+    }
+  };
+
   renderBigCalendar() {
     const className = classnames({
       transparent: !this.props.fetched,
@@ -139,6 +98,7 @@ class Calendar extends React.Component {
           registeredEvents={this.props.registeredEvents}
           canAdd={this.props.canAdd}
           updateShownDate={this.updateShownDate}
+          onDayClick={this.handleDayClick}
           {...props}
         />
       ),
@@ -146,14 +106,21 @@ class Calendar extends React.Component {
     };
 
     return (
-      <BigCalendar
-        className={className}
-        components={components}
-        events={[]}
-        views={['month']}
-        formats={formats}
-        defaultDate={new Date()}
-      />
+      <React.Fragment>
+        <BigCalendar
+          className={className}
+          components={components}
+          events={[]}
+          views={['month']}
+          formats={formats}
+          defaultDate={new Date()}
+        />
+        <DayDetailDialog
+          hidden={this.state.hideDayDetailDialog}
+          events={this.state.dialogEvents}
+          onClose={this.handleDayDialogClose}
+        />
+      </React.Fragment>
     )
   }
 
