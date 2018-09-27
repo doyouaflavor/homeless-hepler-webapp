@@ -24,7 +24,7 @@ class DateCellWrapper extends React.Component {
           <div key={e._id} className='day-event-title'>
             {getTimeStr(e.date)} {getItemStr(e.content[0])}
           </div>
-        )).slice(0,2)
+        )).slice(-1)
       ):
       null;
 
@@ -38,13 +38,13 @@ class DateCellWrapper extends React.Component {
           />
         }
         {
-          matchedEvents.length < 3 ?
+          matchedEvents.length < 2 ?
             null :
             <div
               role="button"
               className="more-btn"
             >
-              ...還有 {matchedEvents.length - 2} 個
+              ...還有 {matchedEvents.length - 1} 個
             </div>
         }
         { renderedItems }
