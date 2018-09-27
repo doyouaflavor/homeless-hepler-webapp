@@ -98,16 +98,13 @@ $dates-selector-select-border: 2px solid #D3D3D3;
 
         .rbc-row-bg {
           .rbc-day-bg {
+            position: relative;
             border-left: $cell-border;
             background-clip: padding-box;
             display: flex;
-            flex-direction: column;
             overflow: hidden;
             cursor: pointer;
-
-            &.read-only {
-              flex-direction: column-reverse;
-            }
+            flex-direction: column-reverse;
 
             &:last-child {
               border-right: $cell-border;
@@ -118,10 +115,11 @@ $dates-selector-select-border: 2px solid #D3D3D3;
             }
 
             .add-event-btn {
-              align-self: flex-end;
+              position: absolute;
+              right: 4px;
+              top: 4px;
               cursor: pointer;
               z-index: 5;
-              margin: 5px 7px 0 0;
               width: 18px;
               height: 18px;
               color: $add-event-btn-color;
@@ -137,7 +135,7 @@ $dates-selector-select-border: 2px solid #D3D3D3;
               overflow: hidden;
             }
             .more-btn {
-              font-size: 10px;
+              font-size: 9px;
               text-decoration: underline;
               text-align: left;
               color: blue;
