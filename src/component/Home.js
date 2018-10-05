@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link as RouteLink } from 'react-router-dom';
 import '../App.css';
 import { Link, Events, animateScroll as scroll, scroller } from 'react-scroll'
 
@@ -159,6 +160,14 @@ class Home extends Component {
                     <Typography variant="title" color="inherit" className="tab-content">
                       <Link activeClass="active" to="motivation" spy={true} smooth={true} duration={500}>專案緣起</Link>
                     </Typography>
+                    {profile && profile.admin
+                      ? (
+                        <Typography variant="title" color="inherit" className="tab-content">
+                          <RouteLink to="/admin">主控台</RouteLink>
+                        </Typography>
+                      )
+                      : null
+                    }
                     {profile
                       ? (
                         <Typography
