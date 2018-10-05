@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Home from './component/Home';
 import Form from './component/Form';
 import Admin from './component/Admin';
@@ -15,6 +15,15 @@ const logPageView = () => {
 
   return null;
 };
+
+const AdminGuard = (props) => (
+  <AuthContext.Consumer>
+    {({ profile }) => (profile && profile.admin
+      ? <Admin {...props} />
+      : <Redirect to="/" />
+    )}
+  </AuthContext.Consumer>
+);
 
 class App extends Component {
   constructor(props) {
@@ -50,7 +59,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/form" component={Form} />
-          <Route path="/admin" component={Admin} />
+          <Route path="/admin" component={AdminGuard} />
         </Switch>
         <Footer/>
       </AuthContext.Provider>
