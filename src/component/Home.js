@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 
 import Calendar from './Calendar';
 import LoginDialog from './LoginDialog';
+import PasswordDialog from './PasswordDialog';
 
 import moment from 'moment';
 import filter from 'lodash/filter';
@@ -33,6 +34,7 @@ class Home extends Component {
     registeredEvents: [],
     fetched: false,
     loginOpen: false,
+    passwordOpen: false,
   };
 
   constructor (props){
@@ -41,6 +43,8 @@ class Home extends Component {
     this.scrollToTop = this.scrollToTop.bind(this);
     this.openLogin = this.openLogin.bind(this);
     this.closeLogin = this.closeLogin.bind(this);
+    this.openPassword = this.openPassword.bind(this);
+    this.closePassword = this.closePassword.bind(this);
   }
 
   async componentDidMount() {
@@ -118,6 +122,17 @@ class Home extends Component {
     });
   }
 
+  openPassword() {
+    this.setState({
+      passwordOpen: true,
+    });
+  }
+
+  closePassword() {
+    this.setState({
+      passwordOpen: false,
+    });
+  }
 
   render() {
     let status = '讀取資料中'
@@ -143,6 +158,10 @@ class Home extends Component {
               open={this.state.loginOpen}
               onClose={this.closeLogin}
               onSuccess={setProfile}
+            />
+            <PasswordDialog
+              open={this.state.passwordOpen}
+              onClose={this.closePassword}
             />
             {/* navbar */}
             <AppBar position="static" className="navbar">
@@ -170,14 +189,24 @@ class Home extends Component {
                     }
                     {profile
                       ? (
-                        <Typography
-                          variant="title"
-                          color="inherit"
-                          className="tab-content"
-                          onClick={() => { setProfile(null); }}
-                        >
-                          登出
-                        </Typography>
+                        <React.Fragment>
+                          <Typography
+                            variant="title"
+                            color="inherit"
+                            className="tab-content"
+                            onClick={this.openPassword}
+                          >
+                            變更密碼
+                          </Typography>
+                          <Typography
+                            variant="title"
+                            color="inherit"
+                            className="tab-content"
+                            onClick={() => { setProfile(null); }}
+                          >
+                            登出
+                          </Typography>
+                        </React.Fragment>
                       )
                       : (
                         <Typography
