@@ -2,6 +2,8 @@ import padStart from 'lodash/padStart';
 
 import { ZH_WEEKDAY } from './const';
 
+const PROFILE_KEY = 'profile';
+
 function matchEvent(e0, e1) {
   return (
     e0.year() === e1.year() &&
@@ -22,8 +24,23 @@ function getTimeStr(date) {
   );
 }
 
+function getProfile() {
+  const data = localStorage.getItem(PROFILE_KEY);
+  return data ? JSON.parse(data) : null;
+}
+
+function setProfile(profile) {
+  if (profile) {
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  } else {
+    localStorage.removeItem(PROFILE_KEY);
+  }
+}
+
 export {
   matchEvent,
   getDateStr,
   getTimeStr,
+  setProfile,
+  getProfile,
 }
