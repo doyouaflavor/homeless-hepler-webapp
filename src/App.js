@@ -5,6 +5,7 @@ import Form from './component/Form';
 import Admin from './component/Admin';
 import Footer from './component/Footer';
 import { AuthContext } from './context';
+import { getProfile, setProfile } from './utils';
 
 import ga from './googleAnalytics';
 
@@ -29,10 +30,9 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    const profile = localStorage.getItem(PROFILE_KEY);
     this.setProfile = this.setProfile.bind(this);
     this.state = {
-      profile: profile ? JSON.parse(profile) : null,
+      profile: getProfile(),
       setProfile: this.setProfile,
     };
   }
@@ -45,11 +45,7 @@ class App extends Component {
     this.setState({
       profile,
     });
-    if (profile) {
-      localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-    } else {
-      localStorage.removeItem(PROFILE_KEY);
-    }
+    setProfile(profile);
   }
 
   render() {
