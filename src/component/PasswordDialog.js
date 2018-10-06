@@ -112,7 +112,7 @@ class LoginDialog extends PureComponent {
             id="newPassword"
             margin="dense"
             type="password"
-            label="舊密碼"
+            label="新密碼"
             value={newPassword}
             onChange={this.handleNewPasswordChange}
           />
