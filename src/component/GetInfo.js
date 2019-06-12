@@ -299,7 +299,8 @@ class GetInfo extends React.Component {
               <div className="info">
                 <h2>電子信箱</h2>
                 <input
-                  type="text"
+                  type="email"
+                  autoComplete="email"
                   ref="email"
                   placeholder="電子信箱"
                   className="more-width"
@@ -311,7 +312,8 @@ class GetInfo extends React.Component {
               <div className="info">
                 <h2>電話</h2>
                 <input
-                  type="text"
+                  type="tel"
+                  autoComplete="tel"
                   ref="phone"
                   placeholder="電話"
                   value={this.state.phone}
