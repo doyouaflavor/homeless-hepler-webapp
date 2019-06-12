@@ -18,7 +18,6 @@ import some from 'lodash/some';
 import { Link as Rlink} from 'react-router-dom';
 
 import * as helper from '../form-helper';
-import GetStepContent from "./GetStepContent";
 
 const styles = {
   confirmButton: {
@@ -34,19 +33,15 @@ const styles = {
   }
 };
 
-const getDefaultContentArray = () => (
-  [{ name: '', amount: '', description: '' }]
-);
-
 class GetItem extends React.Component {
   constructor(props) {
     super(props);
     const contentProp = this.props.fieldValues.items[0].content;
     this.state = {
       openCancelDialog:false,
-      content: contentProp.length ? contentProp : getDefaultContentArray(),
+      content: contentProp.length ? contentProp : helper.getDefaultContentArray(),
       open: false,
-      isInputRemembered: Boolean(helper.getDonationInputs()),
+      isInputRemembered: Boolean(helper.getCachedInputsByKey(helper.DONATION_INPUT_KEY)),
     };
   }
 
@@ -55,7 +50,8 @@ class GetItem extends React.Component {
   }
 
   handleAddContent = () => {
-    this.setState({ content: this.state.content.concat(getDefaultContentArray()) });
+    const newContent = this.state.content.concat(helper.getDefaultContentArray());
+    this.setState({ content: newContent });
   }
 
   handleRemoveContent = (idx) => () => {
@@ -110,7 +106,7 @@ class GetItem extends React.Component {
     if (this.state.isInputRemembered) {
       helper.saveDonationInputs(this.state.content)
     } else {
-      helper.removeDonationInputs()
+      helper.removeCachedInputsByKey(helper.DONATION_INPUT_KEY);
     }
   };
 
@@ -136,7 +132,7 @@ class GetItem extends React.Component {
                 </Grid>
               </Hidden>
                 {this.state.content.map((content, idx) => (
-                  <Grid container direction='row' className="item-list">
+                  <Grid key={idx} container direction='row' className="item-list">
                     <Grid item xs={12} md={4} className="item">
                       <h2 className="hidden-md">項目</h2>
                       <input

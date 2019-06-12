@@ -48,11 +48,13 @@ const getDefaultState = ( giver ) => {
     errors: [],
     isInfoRemembered: false,
   };
+  const cachedGiver = helper.getCachedInputsByKey(helper.CONTACT_INFO_KEY);
+  const checkBoxState = { isInfoRemembered: Boolean(cachedGiver)};
 
   if (isPropsGiverUsable(giver)) {
-    return Object.assign({}, defaultState, giver);
-  } else if (helper.getContactInfo()) {
-    return helper.getContactInfo();
+    return Object.assign({}, defaultState, giver, checkBoxState);
+  } else if (cachedGiver) {
+    return Object.assign({}, defaultState, cachedGiver, checkBoxState);
   } else {
     return defaultState;
   }
@@ -134,6 +136,32 @@ class GetInfo extends React.Component {
     }
   }
 
+  handlePrevStepClick = (e) => {
+    e.preventDefault();
+    this.props.saveGiverValues(this.extractGiverValues());
+    this.props.handleBack();
+  };
+
+  extractGiverValues = () => {
+    const {
+      type,
+      name,
+      contactName,
+      contactTitle,
+      email,
+      phone,
+    } = this.state;
+
+    return  {
+      type: type,
+      name: type === 'person' ? contactName : name,
+      contactName,
+      contactTitle,
+      email,
+      phone,
+    };
+  };
+
   changeType(event) {
     event.preventDefault();
 
@@ -196,9 +224,9 @@ class GetInfo extends React.Component {
   handleRememberInputs = () => {
     // save inputs if checkbox is checked; remove stored data if unchecked
     if (this.state.isInfoRemembered) {
-      helper.saveContactInfo(this.state)
+      helper.saveContactInfo(this.extractGiverValues());
     } else {
-      helper.removeContactInfo()
+      helper.removeCachedInputsByKey(helper.CONTACT_INFO_KEY);
     }
   };
 
@@ -309,7 +337,7 @@ class GetInfo extends React.Component {
         </div>
         {/* 按鈕 */}
         <Grid container direction="row" justify="space-between">
-          <Button variant="outlined" onClick={this.props.handleBack} className="formbutton-back">
+          <Button variant="outlined" onClick={this.handlePrevStepClick} className="formbutton-back">
             <i className="fas fa-arrow-left"></i>
             上一步</Button>
           <Hidden smUp>

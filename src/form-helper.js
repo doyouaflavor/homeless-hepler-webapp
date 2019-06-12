@@ -1,17 +1,11 @@
-const DONATION_INPUT_KEY = 'donations';
-const CONTACT_INFO_KEY = 'contacts';
+export const DONATION_INPUT_KEY = 'donations';
+export const CONTACT_INFO_KEY = 'contacts';
 
-export const getDonationInputs = () => {
-  if (window) {
-    const content = window.localStorage.getItem(DONATION_INPUT_KEY)
+const KEYS = [
+  DONATION_INPUT_KEY,
+  CONTACT_INFO_KEY,
+];
 
-    if (content) {
-      return JSON.parse(content);
-    }
-  }
-
-  return undefined;
-};
 
 export const saveDonationInputs = (content) => {
   if (window) {
@@ -22,32 +16,38 @@ export const saveDonationInputs = (content) => {
   }
 };
 
-export const removeDonationInputs = () => {
-  if (window) {
-    window.localStorage.removeItem(DONATION_INPUT_KEY)
-  }
-};
-
-export const getContactInfo = () => {
-  if (window) {
-    const info = window.localStorage.getItem(CONTACT_INFO_KEY);
-
-    if (info) {
-      return JSON.parse(info);
-    }
-  }
-
-  return undefined;
-};
-
 export const saveContactInfo = (info) => {
   if (window) {
     window.localStorage.setItem(CONTACT_INFO_KEY, JSON.stringify(info));
   }
 };
 
-export const removeContactInfo = () => {
+export const removeCachedInputsByKey = (key) => {
+  if (typeof key !== 'string' || !KEYS.includes(key)) {
+    throw new Error(`invalid key: ${key}. Must be a string and is one of ${KEYS.toString()}`)
+  }
+
   if (window) {
-    window.localStorage.removeItem(CONTACT_INFO_KEY)
+    window.localStorage.removeItem(key)
   }
 };
+
+export const getCachedInputsByKey = (key) => {
+  if (typeof key !== 'string' || !KEYS.includes(key)) {
+    throw new Error(`invalid key: ${key}. Must be a string and is one of ${KEYS.toString()}`)
+  }
+
+  if (window) {
+    const data = window.localStorage.getItem(key);
+
+    if (data) {
+      return JSON.parse(data);
+    }
+  }
+
+  return undefined;
+};
+
+export const getDefaultContentArray = () => (
+  [{ name: '', amount: '', description: '' }]
+);

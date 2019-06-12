@@ -19,7 +19,7 @@ import map from 'lodash/map';
 import merge from 'lodash/merge';
 
 import { getTaipeiStationEvents } from '../api/events';
-import { getDonationInputs } from '../form-helper';
+import { getCachedInputsByKey, DONATION_INPUT_KEY } from '../form-helper';
 
 let fieldValues ={
   locationId: '',
@@ -46,7 +46,7 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     // Get last saved donations inputs
-    const content = getDonationInputs()
+    const content = getCachedInputsByKey(DONATION_INPUT_KEY);
     if (content) {
       fieldValues.items[0].content = content
     }
