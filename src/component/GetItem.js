@@ -8,12 +8,16 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
 import map from 'lodash/map';
 import some from 'lodash/some';
 
 import { Link as Rlink} from 'react-router-dom';
+
+import * as helper from '../form-helper';
 
 const styles = {
   confirmButton: {
@@ -29,26 +33,27 @@ const styles = {
   }
 };
 
-const getDefaultContentArray = () => (
-  [{ name: '', amount: '', description: '' }]
-);
-
 class GetItem extends React.Component {
   constructor(props) {
     super(props);
     const contentProp = this.props.fieldValues.items[0].content;
     this.state = {
       openCancelDialog:false,
-      content: contentProp.length ? contentProp : getDefaultContentArray(),
+      content: contentProp.length ? contentProp : helper.getDefaultContentArray(),
       open: false,
+      isInputRemembered: Boolean(helper.getCachedInputsByKey(helper.DONATION_INPUT_KEY)),
     };
-    this.nextStep = this.nextStep.bind(this);
   }
-    
+
+  componentWillUnmount() {
+    this.handleRememberInputs()
+  }
+
   handleAddContent = () => {
-    this.setState({ content: this.state.content.concat(getDefaultContentArray()) });
+    const newContent = this.state.content.concat(helper.getDefaultContentArray());
+    this.setState({ content: newContent });
   }
-  
+
   handleRemoveContent = (idx) => () => {
     this.setState({ content: this.state.content.filter((element,indexbeselced) => idx !== indexbeselced) });
   }
@@ -68,7 +73,7 @@ class GetItem extends React.Component {
     });
   };
 
-  nextStep(event) {
+  nextStep = (event) => {
     event.preventDefault();
 
     const data = this.state.content;
@@ -91,7 +96,21 @@ class GetItem extends React.Component {
     this.setState({ openCancelDialog: false });
   }
 
-  render() {    
+  handleMemorizeInputCheckboxChange = (e) => {
+    const { checked } = e.target
+    this.setState({ isInputRemembered : checked })
+  };
+
+  handleRememberInputs = () => {
+    // save inputs if checkbox is checked; remove stored data if unchecked
+    if (this.state.isInputRemembered) {
+      helper.saveDonationInputs(this.state.content)
+    } else {
+      helper.removeCachedInputsByKey(helper.DONATION_INPUT_KEY);
+    }
+  };
+
+  render() {
     return (
       <div>
         <div className="form-frame">
@@ -113,7 +132,7 @@ class GetItem extends React.Component {
                 </Grid>
               </Hidden>
                 {this.state.content.map((content, idx) => (
-                  <Grid container direction='row' className="item-list">
+                  <Grid key={idx} container direction='row' className="item-list">
                     <Grid item xs={12} md={4} className="item">
                       <h2 className="hidden-md">項目</h2>
                       <input
@@ -149,16 +168,16 @@ class GetItem extends React.Component {
                       />
                       <Hidden smDown>
                         <button type="button" onClick={this.handleAddContent}>+</button>
-                        {this.state.content.length > 1 ? 
+                        {this.state.content.length > 1 ?
                           <button type="button" onClick={this.handleRemoveContent(idx)}>-</button> : null
-                        }      
+                        }
                       </Hidden>
                     </Grid>
                     <Grid container direction="row" justify="space-between">
                       <button type="button" onClick={this.handleAddContent} className="hidden-md">
                         + 新增項目
                       </button>
-                      {this.state.content.length > 1 ? 
+                      {this.state.content.length > 1 ?
                         <button type="button" onClick={this.handleRemoveContent(idx)} className="hidden-md">
                         - 刪除項目
                         </button> : null}
@@ -168,10 +187,23 @@ class GetItem extends React.Component {
             </div>
             </div>
           </div>
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.isInputRemembered}
+                  onChange={this.handleMemorizeInputCheckboxChange}
+                  value="remembered"
+                  color="primary"
+                />
+              }
+              label="記住我的輸入"
+            />
+          </div>
           {/* 按鈕 */}
           <Grid container direction="row" justify="space-between">
             <Button variant="outlined" onClick={this.props.handleBack} className="formbutton-back">
-              <i className="fas fa-arrow-left"></i> 
+              <i className="fas fa-arrow-left"></i>
               上一步</Button>
             <Hidden smUp>
               <div className="cancle-log" onClick={this.handleCancelDialogOpen}>取消登記</div>
@@ -242,6 +274,11 @@ GetItem.propTypes = {
       content: PropTypes.array,
     }),
   }).isRequired,
+  saveDateValues: PropTypes.func,
+  saveContentValues: PropTypes.func,
+  saveGiverValues: PropTypes.func,
+  handleNext: PropTypes.func,
+  handleBack: PropTypes.func,
 };
 
 export default withStyles(styles)(GetItem);

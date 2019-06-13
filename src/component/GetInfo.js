@@ -8,6 +8,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
 import validator from 'validator';
@@ -16,6 +18,7 @@ import map from 'lodash/map';
 import { GIVER_TYPES, CONTACT_TITLES } from '../const';
 
 import { Link as Rlink} from 'react-router-dom';
+import * as helper from "../form-helper";
 
 
 const styles = {
@@ -32,8 +35,8 @@ const styles = {
   }
 };
 
-const getDefaultState = () => {
-  return {
+const getDefaultState = ( giver ) => {
+  const defaultState =  {
     openCancelDialog: false,
     type: 'person',
     name: '',
@@ -43,7 +46,19 @@ const getDefaultState = () => {
     phone: '',
     open: false,
     errors: [],
+    isInfoRemembered: false,
   };
+  const cachedGiver = helper.getCachedInputsByKey(helper.CONTACT_INFO_KEY);
+  const checkBoxState = { isInfoRemembered: Boolean(cachedGiver)};
+
+  if (isPropsGiverUsable(giver)) {
+    return Object.assign({}, defaultState, giver, checkBoxState);
+  } else if (cachedGiver) {
+    return Object.assign({}, defaultState, cachedGiver, checkBoxState);
+  } else {
+    return defaultState;
+  }
+
 };
 
 const isPropsGiverUsable = (propGiver) => {
@@ -54,13 +69,18 @@ class GetInfo extends React.Component {
   constructor(props) {
     super(props);
     const { giver } = this.props.fieldValues;
-    this.state = isPropsGiverUsable(giver) ? {...getDefaultState(), ...giver} : getDefaultState();
+    this.state = getDefaultState(giver);
+
     this.nextStep = this.nextStep.bind(this);
     this.changeType = this.changeType.bind(this);
     this.validate = this.validate.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCancelDialogOpen = this.handleCancelDialogOpen.bind(this);
     this.handleCancelDialogClose = this.handleCancelDialogClose.bind(this);
+  }
+
+  componentWillUnmount() {
+    this.handleRememberInputs();
   }
 
   validate() {
@@ -116,6 +136,32 @@ class GetInfo extends React.Component {
     }
   }
 
+  handlePrevStepClick = (e) => {
+    e.preventDefault();
+    this.props.saveGiverValues(this.extractGiverValues());
+    this.props.handleBack();
+  };
+
+  extractGiverValues = () => {
+    const {
+      type,
+      name,
+      contactName,
+      contactTitle,
+      email,
+      phone,
+    } = this.state;
+
+    return  {
+      type: type,
+      name: type === 'person' ? contactName : name,
+      contactName,
+      contactTitle,
+      email,
+      phone,
+    };
+  };
+
   changeType(event) {
     event.preventDefault();
 
@@ -168,6 +214,21 @@ class GetInfo extends React.Component {
   handleCancelDialogClose = (event) => {
     this.setState({openCancelDialog: false});
   }
+
+  handleMemorizeChkBoxChange = (e) => {
+    this.setState({
+      isInfoRemembered: e.target.checked,
+    });
+  };
+
+  handleRememberInputs = () => {
+    // save inputs if checkbox is checked; remove stored data if unchecked
+    if (this.state.isInfoRemembered) {
+      helper.saveContactInfo(this.extractGiverValues());
+    } else {
+      helper.removeCachedInputsByKey(helper.CONTACT_INFO_KEY);
+    }
+  };
 
   render() {
     return (
@@ -238,7 +299,8 @@ class GetInfo extends React.Component {
               <div className="info">
                 <h2>電子信箱</h2>
                 <input
-                  type="text"
+                  type="email"
+                  autoComplete="email"
                   ref="email"
                   placeholder="電子信箱"
                   className="more-width"
@@ -250,7 +312,8 @@ class GetInfo extends React.Component {
               <div className="info">
                 <h2>電話</h2>
                 <input
-                  type="text"
+                  type="tel"
+                  autoComplete="tel"
                   ref="phone"
                   placeholder="電話"
                   value={this.state.phone}
@@ -261,9 +324,22 @@ class GetInfo extends React.Component {
             </div>
           </div>
         </div>
+        <div>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.isInfoRemembered}
+                onChange={this.handleMemorizeChkBoxChange}
+                value="remembered"
+                color="primary"
+              />
+            }
+            label="記住我的聯絡資訊"
+          />
+        </div>
         {/* 按鈕 */}
         <Grid container direction="row" justify="space-between">
-          <Button variant="outlined" onClick={this.props.handleBack} className="formbutton-back">
+          <Button variant="outlined" onClick={this.handlePrevStepClick} className="formbutton-back">
             <i className="fas fa-arrow-left"></i>
             上一步</Button>
           <Hidden smUp>
